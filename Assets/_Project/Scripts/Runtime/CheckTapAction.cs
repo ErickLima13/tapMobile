@@ -22,14 +22,18 @@ public class CheckTapAction : MonoBehaviour
         }
     }
 
-    private void IsClickedOn()
+    private bool IsClickedOn
     {
-        var hits = Physics2D.RaycastAll(WorldPos, Vector2.zero, float.MaxValue, _layerCollider);
-
-        if (hits != null && hits.Length > 0)
+        get
         {
-            _clickedObject = hits[0].collider.gameObject;       
-            OnTapCollider?.Invoke();
+            var hits = Physics2D.RaycastAll(WorldPos, Vector2.zero, float.MaxValue, _layerCollider);
+
+            if (hits != null && hits.Length > 0)
+            {
+                _clickedObject = hits[0].collider.gameObject;
+                return true;
+            }
+            return false;
         }
     }
 
@@ -40,13 +44,14 @@ public class CheckTapAction : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputActions.FindAction("Point").performed += context => { _curScreenPos = context.ReadValue<Vector2>();  };
-        _inputActions.FindAction("Click").performed += _ => { IsClickedOn(); };
+        _inputActions.FindAction("Point").performed += context => { _curScreenPos = context.ReadValue<Vector2>(); };
+        _inputActions.FindAction("Click").performed += _ => { if (IsClickedOn) OnTapCollider?.Invoke(); };
     }
 
     private void OnDisable()
     {
         _inputActions.FindAction("Point").performed -= context => { _curScreenPos = context.ReadValue<Vector2>(); };
-        _inputActions.FindAction("Click").performed -= _ => { IsClickedOn(); };
+        _inputActions.FindAction("Click").performed -= _ => { if (IsClickedOn) OnTapCollider?.Invoke(); };
+
     }
 }
