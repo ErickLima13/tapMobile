@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a38399b980a29842913dbd9a239e65b, type: 3}
   m_Name: 1
   m_EditorClassIdentifier: 
-  isLeft: 0
-  activeTime: 0.5
+  isLeft: 1
+  activeTime: 5

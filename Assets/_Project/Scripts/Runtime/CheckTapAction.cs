@@ -7,12 +7,14 @@ public class CheckTapAction : MonoBehaviour
     private Vector3 _curScreenPos;
     private Camera _mainCamera;
 
-    public event Action OnTapCollider;
+    public event Action<AreaCollider> OnTapCollider;
 
     [SerializeField] private InputActionAsset _inputActions;
     [SerializeField] private LayerMask _layerCollider;
 
     public GameObject _clickedObject;
+
+    private AreaCollider _areaCollider;
 
     private Vector3 WorldPos
     {
@@ -31,6 +33,7 @@ public class CheckTapAction : MonoBehaviour
             if (hits != null && hits.Length > 0)
             {
                 _clickedObject = hits[0].collider.gameObject;
+                _areaCollider = _clickedObject.GetComponent<AreaCollider>();
                 return true;
             }
             return false;
@@ -45,13 +48,13 @@ public class CheckTapAction : MonoBehaviour
     private void OnEnable()
     {
         _inputActions.FindAction("Point").performed += context => { _curScreenPos = context.ReadValue<Vector2>(); };
-        _inputActions.FindAction("Click").performed += _ => { if (IsClickedOn) OnTapCollider?.Invoke(); };
+        _inputActions.FindAction("Click").performed += _ => { if (IsClickedOn) OnTapCollider?.Invoke(_areaCollider); };
     }
 
     private void OnDisable()
     {
         _inputActions.FindAction("Point").performed -= context => { _curScreenPos = context.ReadValue<Vector2>(); };
-        _inputActions.FindAction("Click").performed -= _ => { if (IsClickedOn) OnTapCollider?.Invoke(); };
+        _inputActions.FindAction("Click").performed -= _ => { if (IsClickedOn) OnTapCollider?.Invoke(_areaCollider); };
 
     }
 }

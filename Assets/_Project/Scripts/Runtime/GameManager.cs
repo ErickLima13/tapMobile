@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -9,10 +11,14 @@ public class GameManager : MonoBehaviour
     public CheckTapAction _checkTapAction;
 
     public int score;
-    public int life;
     public int maxLife;
+    public int life;
 
     public List<ActiveTimeData> activetimes = new();
+
+    public bool isTap;
+
+    public TextMeshProUGUI _scoreText;
 
     private void Start()
     {
@@ -36,34 +42,52 @@ public class GameManager : MonoBehaviour
         {
             if (activetimes[i].isLeft)
             {
-                _areasColliders[0]._collider.enabled = true;
+                print("aqui começo esqueda " + i);
+
+                _areasColliders[0].gameObject.SetActive(true);
+
                 yield return new WaitForSeconds(activetimes[i].activeTime);
 
-                print("aqui esqueda");
+                _areasColliders[0].gameObject.SetActive(false);
+
+                print("aqui acabo esqueda " + i);
             }
             else
             {
-                _areasColliders[1]._collider.enabled = true;
+                print("aqui começo direita " + i);
+
+                _areasColliders[1].gameObject.SetActive(true);
+
                 yield return new WaitForSeconds(activetimes[i].activeTime);
-                print("aqui direita");
+
+                _areasColliders[1].gameObject.SetActive(false);
+
+                print("aqui acabo direita " + i);
             }
-
-            _areasColliders[i]._collider.enabled = false;
-            _areasColliders[i].gameObject.SetActive(false);
-
-            print("aqui acabo");
-
         }
     }
 
-    private void CheckTap()
+    private void CheckTap(AreaCollider area)
     {
+        isTap = true;
+
+        _areasColliders.First(x => x == area).gameObject.SetActive(false);
+
         print("tap in time");
         score++;
+
+        _scoreText.text = score.ToString();
+
+        isTap = false;
     }
 
     private void CheckDisable()
     {
+        if (isTap)
+        {
+            return;
+        }
+
         if (life <= maxLife)
         {
             life--;
@@ -74,8 +98,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-
-        print("disable" + _areasColliders.Length);
+        //print("disable" + _areasColliders.Length);
     }
 
     private void OnDisable()
