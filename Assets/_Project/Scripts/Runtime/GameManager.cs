@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,15 @@ public class GameManager : MonoBehaviour
     public int score;
     public int maxLife;
     public int life;
+    public bool isTap;
+    public Vector2 _distance;
 
     public CheckTapAction _checkTapAction;
-    public AreaCollider[] _areasColliders;
-    public bool isTap;
     public TextMeshProUGUI _scoreText;
-    public Vector2 _distance;
-    public List<ActiveTimeData> activetimes = new();
+
+    public AreaCollider[] _areasColliders;
+
+    public List<ActiveTime> activetimes = new();
 
     private Dictionary<ScreenPositions, AreaCollider> _areasMap = new();
 
@@ -31,34 +34,67 @@ public class GameManager : MonoBehaviour
         }
 
         _checkTapAction.OnTapCollider += CheckTap;
-
-        StartCoroutine(StartWave());
+        StartCoroutine(StartWave(1));
     }
 
-    private IEnumerator StartWave()
+    private List<ActiveTime> CreateWave(int level)
     {
+        int numberOfEnemies = 5;
+        float maxTime = 2f;
+        float minTime = 0.5f;
+
+        List<ActiveTime> enemies = new();
+
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            float time = Random.Range(minTime, maxTime);
+            ScreenPositions position = ScreenPositions.Left;
+
+            if (Random.Range(0f, 1f) < 0.5f)
+            {
+                position = ScreenPositions.Right;
+            }
+
+            float randomX = Random.Range(-_distance.x, _distance.x);
+            float randomY = Random.Range(-_distance.y, _distance.y);
+
+            enemies.Add(new()
+            {
+                activeTime = time,
+                position = position,
+                worldPosition = new(randomX, randomY),
+            });
+        }
+
+        return enemies;
+    }
+
+    private IEnumerator StartWave(int level)
+    {
+        var enemies = CreateWave(level);
+
         yield return new WaitForEndOfFrame();
 
-        for (int i = 0; i < activetimes.Count; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
-            var areaCollider = _areasMap[activetimes[i].position];
+            var enemy = enemies[i];
+            var areaCollider = _areasMap[enemy.position];
 
             print("aqui começo  " + i);
 
-            //float randomX = Random.Range(-_distance.x, _distance.x);
-            //float randomY = Random.Range(-_distance.y, _distance.y);
-            //areaCollider.transform.position = new(randomX, randomY);
-
+            areaCollider.transform.position = enemy.worldPosition;
             areaCollider.gameObject.SetActive(true);
 
-            yield return new WaitForSeconds(activetimes[i].activeTime);
+            yield return new WaitForSeconds(enemy.activeTime);
 
             areaCollider.gameObject.SetActive(false);
 
             print("aqui acabo  " + i);
-
-            yield return new WaitForEndOfFrame();
         }
+
+        //yield return new WaitForEndOfFrame();
+        //level++;
+        //StartCoroutine(StartWave(level));
     }
 
     private void CheckTap(AreaCollider area)
@@ -104,4 +140,12 @@ public class GameManager : MonoBehaviour
 
         _checkTapAction.OnTapCollider -= CheckTap;
     }
+}
+
+
+[System.Serializable]
+public struct Wave
+{
+    public List<ActiveTime> Activetimes;
+    public int WaveLevel;
 }
