@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a38399b980a29842913dbd9a239e65b, type: 3}
   m_Name: 2
   m_EditorClassIdentifier: 
-  isLeft: 0
-  activeTime: 2
+  position: 1
+  activeTime: 1.5

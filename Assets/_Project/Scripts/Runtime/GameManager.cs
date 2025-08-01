@@ -6,19 +6,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public AreaCollider[] _areasColliders;
-
-    public CheckTapAction _checkTapAction;
-
     public int score;
     public int maxLife;
     public int life;
 
+    public CheckTapAction _checkTapAction;
+    public AreaCollider[] _areasColliders;
+    public bool isTap;
+    public TextMeshProUGUI _scoreText;
+    public Vector2 _distance;
     public List<ActiveTimeData> activetimes = new();
 
-    public bool isTap;
-
-    public TextMeshProUGUI _scoreText;
+    private Dictionary<ScreenPositions, AreaCollider> _areasMap = new();
 
     private void Start()
     {
@@ -27,43 +26,38 @@ public class GameManager : MonoBehaviour
         foreach (AreaCollider a in _areasColliders)
         {
             a.OnDisableCollider += CheckDisable;
+            _areasMap.Add(a.position, a);
+            a.gameObject.SetActive(false);
         }
 
         _checkTapAction.OnTapCollider += CheckTap;
 
-        StartCoroutine(DelayActive());
+        StartCoroutine(StartWave());
     }
 
-    private IEnumerator DelayActive()
+    private IEnumerator StartWave()
     {
         yield return new WaitForEndOfFrame();
 
         for (int i = 0; i < activetimes.Count; i++)
         {
-            if (activetimes[i].isLeft)
-            {
-                print("aqui começo esqueda " + i);
+            var areaCollider = _areasMap[activetimes[i].position];
 
-                _areasColliders[0].gameObject.SetActive(true);
+            print("aqui começo  " + i);
 
-                yield return new WaitForSeconds(activetimes[i].activeTime);
+            //float randomX = Random.Range(-_distance.x, _distance.x);
+            //float randomY = Random.Range(-_distance.y, _distance.y);
+            //areaCollider.transform.position = new(randomX, randomY);
 
-                _areasColliders[0].gameObject.SetActive(false);
+            areaCollider.gameObject.SetActive(true);
 
-                print("aqui acabo esqueda " + i);
-            }
-            else
-            {
-                print("aqui começo direita " + i);
+            yield return new WaitForSeconds(activetimes[i].activeTime);
 
-                _areasColliders[1].gameObject.SetActive(true);
+            areaCollider.gameObject.SetActive(false);
 
-                yield return new WaitForSeconds(activetimes[i].activeTime);
+            print("aqui acabo  " + i);
 
-                _areasColliders[1].gameObject.SetActive(false);
-
-                print("aqui acabo direita " + i);
-            }
+            yield return new WaitForEndOfFrame();
         }
     }
 

@@ -557,6 +557,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5a30f61e19e1bdd47bb42020ede39a8d, type: 2}
   isTap: 0
   _scoreText: {fileID: 216753541}
+  _distance: {x: 1.3, y: 3.6}
 --- !u!1 &1277604520
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,6 +817,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8737099917059100232, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: position
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -876,10 +881,6 @@ PrefabInstance:
     - target: {fileID: 5846922569381867224, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8247663280272811659, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
-      propertyPath: m_Enabled
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
