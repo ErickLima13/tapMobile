@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +16,6 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI _scoreText;
 
     public AreaCollider[] _areasColliders;
-
     public List<ActiveTime> activetimes = new();
 
     private Dictionary<ScreenPositions, AreaCollider> _areasMap = new();
@@ -100,14 +98,11 @@ public class GameManager : MonoBehaviour
     private void CheckTap(AreaCollider area)
     {
         isTap = true;
-
         _areasColliders.First(x => x == area).gameObject.SetActive(false);
 
-        print("tap in time");
         score++;
 
         _scoreText.text = score.ToString();
-
         isTap = false;
     }
 
@@ -121,14 +116,11 @@ public class GameManager : MonoBehaviour
         if (life <= maxLife)
         {
             life--;
-
             if (life <= 0)
             {
                 life = 0;
             }
         }
-
-        //print("disable" + _areasColliders.Length);
     }
 
     private void OnDisable()
@@ -137,7 +129,6 @@ public class GameManager : MonoBehaviour
         {
             a.OnDisableCollider -= CheckDisable;
         }
-
         _checkTapAction.OnTapCollider -= CheckTap;
     }
 }
