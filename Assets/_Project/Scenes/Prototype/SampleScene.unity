@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 216753542}
   - component: {fileID: 216753541}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ScoreText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -521,6 +521,7 @@ GameObject:
   - component: {fileID: 787878870}
   - component: {fileID: 787878871}
   - component: {fileID: 787878872}
+  - component: {fileID: 787878873}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -572,12 +573,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2be2ac3e21d812c40b0d2c6e5f37b1d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
-  maxLife: 3
-  life: 0
-  isTap: 0
-  _checkTapAction: {fileID: 787878870}
-  _scoreText: {fileID: 216753541}
+  _score: 0
+  _maxLife: 3
+  _currentLife: 0
+  _isTap: 0
 --- !u!114 &787878872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -591,6 +590,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _distance: {x: 1, y: 3}
+--- !u!114 &787878873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 787878867}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82359853871a494c8b915ea9df926ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scoreText: {fileID: 216753541}
+  _livesText: {fileID: 0}
 --- !u!1 &930660551
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,6 +684,8 @@ MonoBehaviour:
   _areasColliders:
   - {fileID: 1417024242}
   - {fileID: 1412308522}
+  _checkTapAction: {fileID: 787878870}
+  _playerStatus: {fileID: 787878871}
 --- !u!1 &1277604520
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,11 +909,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
       propertyPath: m_Name
-      value: AreaColliderR
+      value: EnemyColliderR
       objectReference: {fileID: 0}
     - target: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3755567255946524711, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132954858843989319, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: m_Color.b
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132954858843989319, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4132954858843989319, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5846922569381867224, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -959,11 +990,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
       propertyPath: m_Name
-      value: AreaColliderL
+      value: EnemyColliderL
       objectReference: {fileID: 0}
     - target: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3755567255946524711, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5846922569381867224, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1004,6 +1039,18 @@ PrefabInstance:
     - target: {fileID: 5846922569381867224, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247663280272811659, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247663280272811659, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8247663280272811659, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

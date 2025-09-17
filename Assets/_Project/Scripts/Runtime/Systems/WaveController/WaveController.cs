@@ -59,18 +59,15 @@ public class WaveController : MonoBehaviour
         for (int i = 0; i < enemies.Count; i++)
         {
             var enemy = enemies[i];
-            var areaCollider = _areasMap[enemy.position];
+            var enemyCollider = _areasMap[enemy.position];
 
-            print("aqui começo  " + i);
-
-            areaCollider.transform.position = enemy.worldPosition;
-            areaCollider.gameObject.SetActive(true);
+            enemyCollider.transform.position = enemy.worldPosition;
+            enemyCollider.ActiveVisual(true);
 
             await UniTask.WaitForSeconds(enemy.activeTime);
 
-            areaCollider.gameObject.SetActive(false);
-
-            print("aqui acabo  " + i);
+            enemyCollider.ActiveVisual(false);
+            enemyCollider.CheckDisable();
         }
 
         //yield return new WaitForEndOfFrame();
