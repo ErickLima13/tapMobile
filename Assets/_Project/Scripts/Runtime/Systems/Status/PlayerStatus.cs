@@ -11,7 +11,6 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] private int _score;
     [SerializeField] private int _maxLife;
     [SerializeField] private int _currentLife;
-    [SerializeField] private bool _isTap;
 
     private void Start()
     {

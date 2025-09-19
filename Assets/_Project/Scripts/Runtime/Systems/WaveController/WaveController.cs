@@ -15,6 +15,7 @@ public class WaveController : MonoBehaviour
     {
         foreach (EnemyCollider a in _enemiesColliders) _areasMap.Add(a.position, a);
 
+        _distance = _enemiesColliders[0].GetScreenLimits();
         _ = StartWave(1);
     }
 
@@ -66,8 +67,11 @@ public class WaveController : MonoBehaviour
 
             await UniTask.WaitForSeconds(enemy.activeTime);
 
-            enemyCollider.ActiveVisual(false);
-            enemyCollider.CheckDisable();
+            if (enemyCollider.GetVisualStatus())
+            {
+                enemyCollider.ActiveVisual(false);
+                enemyCollider.TakeDamage();
+            }
         }
 
         //yield return new WaitForEndOfFrame();
