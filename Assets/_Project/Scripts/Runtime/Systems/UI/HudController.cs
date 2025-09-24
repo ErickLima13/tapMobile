@@ -1,29 +1,33 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 public class HudController : MonoBehaviour
 {
-    [Inject] private EnemyCollider[] _enemiesColliders;
     [Inject] private PlayerStatus _playerStatus;
 
     [SerializeField] private TextMeshProUGUI _scoreText;
-    [SerializeField] private TextMeshProUGUI _livesText;
+    [SerializeField] private Image[] _livesImg;
 
     private void Start()
     {
+        Screen.orientation = ScreenOrientation.Portrait;
+
+        UpdateHud(PointType.Score, 0);
         _playerStatus.OnUpdateHud += UpdateHud;
     }
 
-    public void UpdateHud(bool value,int total)
+    public void UpdateHud(PointType value,int total)
     {
-        if (value)
+        if (value == PointType.Score)
         {
             _scoreText.text = total.ToString();
         }
         else
         {
-            // vidas
+            _livesImg[total].enabled = false;
+            print(total);
         }
     }
 

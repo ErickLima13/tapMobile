@@ -6,7 +6,7 @@ public class PlayerStatus : MonoBehaviour
 {
     [Inject] private EnemyCollider[] _enemiesColliders;
 
-    public event Action<bool, int> OnUpdateHud;
+    public event Action<PointType, int> OnUpdateHud;
 
     [SerializeField] private int _score;
     [SerializeField] private int _maxLife;
@@ -22,17 +22,17 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
-    private void TapResult(bool value)
+    private void TapResult(PointType value)
     {
-        if (value)
+        if (value == PointType.Score)
         {
             _score++;
-            OnUpdateHud?.Invoke(true, _score);
+            OnUpdateHud?.Invoke(value, _score);
         }
         else
         {
             TakeDamage();
-            OnUpdateHud?.Invoke(false, _currentLife);
+            OnUpdateHud?.Invoke(value, _currentLife);
         }
     }
 

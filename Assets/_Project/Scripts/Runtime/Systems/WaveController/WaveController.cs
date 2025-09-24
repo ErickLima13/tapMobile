@@ -11,6 +11,10 @@ public class WaveController : MonoBehaviour
     public Vector2 _distance;
     private Dictionary<ScreenPositions, EnemyCollider> _areasMap = new();
 
+    public int _totalEnemies;
+
+    public int _waveCount;
+
     private void Start()
     {
         foreach (EnemyCollider a in _enemiesColliders) _areasMap.Add(a.position, a);
@@ -18,10 +22,14 @@ public class WaveController : MonoBehaviour
         _distance = _enemiesColliders[0].GetScreenLimits();
         _ = StartWave(1);
     }
-
+   
     private List<Enemy> CreateWave(int level)
     {
-        int numberOfEnemies = 5;
+        //numero de inimigos minimos será 5, e o maximo será 5 * numero de waves.
+
+        int numberOfEnemies = Random.Range(5, 5 * level);
+        _totalEnemies = numberOfEnemies;
+
         float maxTime = 2f;
         float minTime = 0.5f;
 
@@ -53,6 +61,7 @@ public class WaveController : MonoBehaviour
 
     private async Task StartWave(int level)
     {
+        _waveCount = level;
         var enemies = CreateWave(level);
 
         await UniTask.WaitForEndOfFrame();
@@ -74,9 +83,9 @@ public class WaveController : MonoBehaviour
             }
         }
 
-        //yield return new WaitForEndOfFrame();
-        //level++;
-        //StartCoroutine(StartWave(level));
+        await UniTask.WaitForEndOfFrame();
+        level++;
+        _ = StartWave(level);
     }
 
 }

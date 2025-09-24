@@ -2,11 +2,17 @@ using System;
 using UnityEngine;
 using Zenject;
 
+public enum PointType
+{
+    Score,
+    Damage
+}
+
 public class EnemyCollider : MonoBehaviour
 {
     [Inject] private CheckTapAction _checkTapAction;
 
-    public event Action<bool> OnTapResult;
+    public event Action<PointType> OnTapResult;
 
     public ScreenPositions position;
 
@@ -54,7 +60,7 @@ public class EnemyCollider : MonoBehaviour
 
         ActiveVisual(false);
 
-        OnTapResult?.Invoke(true);
+        OnTapResult?.Invoke(PointType.Score);
 
         print("acertei");
     }
@@ -66,13 +72,13 @@ public class EnemyCollider : MonoBehaviour
 
     public void TakeDamage()
     {
-        OnTapResult?.Invoke(false);
+        OnTapResult?.Invoke(PointType.Damage);
         print("Dano");
     }
 
     public Vector2 GetScreenLimits()
     {
-        return new Vector2((screenBounds.x - objectWidth) - offset, 3);
+        return new Vector2((screenBounds.x - objectWidth) - offset, 3f);
     }
 
     private void OnDisable()
