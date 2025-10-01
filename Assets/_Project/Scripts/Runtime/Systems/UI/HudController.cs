@@ -10,6 +10,10 @@ public class HudController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private Image[] _livesImg;
 
+    public Button _pauseButton;
+
+    public bool isPause;
+
     private void Start()
     {
         Screen.orientation = ScreenOrientation.Portrait;
@@ -29,6 +33,14 @@ public class HudController : MonoBehaviour
             _livesImg[total].enabled = false;
             print(total);
         }
+    }
+
+    public void PauseButtonClicked()
+    {
+        // delay para quando voltar do pause
+
+        isPause = !isPause;
+        Time.timeScale = isPause ? 0f : 1f;
     }
 
     private void OnDisable()

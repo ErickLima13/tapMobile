@@ -8,12 +8,19 @@ public class WaveController : MonoBehaviour
 {
     [Inject] private EnemyCollider[] _enemiesColliders;
 
+    private const float  _maxTime = 2f;
+    private const float _minTime = 0.5f;
+
     public Vector2 _distance;
     private Dictionary<ScreenPositions, EnemyCollider> _areasMap = new();
 
     public int _totalEnemies;
 
     public int _waveCount;
+
+    public float _currentTime;
+
+    public HudController hudController;
 
     private void Start()
     {
@@ -22,7 +29,7 @@ public class WaveController : MonoBehaviour
         _distance = _enemiesColliders[0].GetScreenLimits();
         _ = StartWave(1);
     }
-   
+
     private List<Enemy> CreateWave(int level)
     {
         //numero de inimigos minimos será 5, e o maximo será 5 * numero de waves.
@@ -30,14 +37,11 @@ public class WaveController : MonoBehaviour
         int numberOfEnemies = Random.Range(5, 5 * level);
         _totalEnemies = numberOfEnemies;
 
-        float maxTime = 2f;
-        float minTime = 0.5f;
-
         List<Enemy> enemies = new();
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
-            float time = Random.Range(minTime, maxTime);
+            float time = Random.Range(_minTime, _maxTime);
             ScreenPositions position = ScreenPositions.Left;
 
             if (Random.Range(0f, 1f) < 0.5f)
@@ -71,16 +75,13 @@ public class WaveController : MonoBehaviour
             var enemy = enemies[i];
             var enemyCollider = _areasMap[enemy.position];
 
-            enemyCollider.transform.position = enemy.worldPosition;
-            enemyCollider.ActiveVisual(true);
+            enemyCollider.SpawnEnemy(enemy.worldPosition);
 
-            await UniTask.WaitForSeconds(enemy.activeTime);
+            _currentTime = enemy.activeTime;
 
-            if (enemyCollider.GetVisualStatus())
-            {
-                enemyCollider.ActiveVisual(false);
-                enemyCollider.TakeDamage();
-            }
+            await UniTask.WaitForSeconds(_currentTime);
+
+            enemyCollider.CheckDamage();
         }
 
         await UniTask.WaitForEndOfFrame();

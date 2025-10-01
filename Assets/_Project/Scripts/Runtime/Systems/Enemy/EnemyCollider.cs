@@ -18,7 +18,6 @@ public class EnemyCollider : MonoBehaviour
 
     private SpriteRenderer _visual;
 
-
     #region ScreenLimit
 
     private Vector2 screenBounds;
@@ -46,7 +45,7 @@ public class EnemyCollider : MonoBehaviour
         _checkTapAction.OnTapCollider += CheckTap;
     }
 
-    public void ActiveVisual(bool value)
+    private void ActiveVisual(bool value)
     {
         _visual.enabled = value;
     }
@@ -65,12 +64,7 @@ public class EnemyCollider : MonoBehaviour
         print("acertei");
     }
 
-    public bool GetVisualStatus()
-    {
-        return _visual.enabled;
-    }
-
-    public void TakeDamage()
+    private void TakeDamage()
     {
         OnTapResult?.Invoke(PointType.Damage);
         print("Dano");
@@ -79,6 +73,21 @@ public class EnemyCollider : MonoBehaviour
     public Vector2 GetScreenLimits()
     {
         return new Vector2((screenBounds.x - objectWidth) - offset, 3f);
+    }
+
+    public void SpawnEnemy(Vector3 position)
+    {
+        transform.position = position;
+        ActiveVisual(true);
+    }
+
+    public void CheckDamage()
+    {
+        if (_visual.enabled)
+        {
+            ActiveVisual(false);
+            TakeDamage();
+        }
     }
 
     private void OnDisable()
