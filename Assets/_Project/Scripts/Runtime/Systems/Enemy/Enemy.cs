@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Enemy 
+public class Enemy
 {
     public ScreenPositions position;
     public float activeTime;

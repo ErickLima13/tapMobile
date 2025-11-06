@@ -22,7 +22,7 @@ public class HudController : MonoBehaviour
         _playerStatus.OnUpdateHud += UpdateHud;
     }
 
-    public void UpdateHud(PointType value,int total)
+    public void UpdateHud(PointType value, int total)
     {
         if (value == PointType.Score)
         {

@@ -1,7 +1,10 @@
+using System;
 using UnityEngine;
 
 public class SpawnFireEffect : MonoBehaviour
 {
+    public event Action<float> OnAnimation;
+
     private Animator _animator;
 
     private void Start()
@@ -13,6 +16,7 @@ public class SpawnFireEffect : MonoBehaviour
     {
         transform.position = position;
         _animator.Play("explosionTouch");
+        OnAnimation?.Invoke(position.x);
     }
 
 }

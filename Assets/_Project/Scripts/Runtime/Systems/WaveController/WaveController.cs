@@ -8,7 +8,7 @@ public class WaveController : MonoBehaviour
 {
     [Inject] private EnemyCollider[] _enemiesColliders;
 
-    private const float  _maxTime = 2f;
+    private const float _maxTime = 2f;
     private const float _minTime = 0.5f;
 
     public Vector2 _distance;
