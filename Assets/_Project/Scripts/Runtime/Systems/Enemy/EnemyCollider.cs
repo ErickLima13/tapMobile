@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 public enum PointType
 {
@@ -15,6 +16,8 @@ public class EnemyCollider : MonoBehaviour
     public event Action<PointType> OnTapResult;
 
     public ScreenPositions position;
+
+    [SerializeField] private EnemyVisual _enemyVisual;
 
     private SpriteRenderer _visual;
 
@@ -32,6 +35,8 @@ public class EnemyCollider : MonoBehaviour
     private void Awake()
     {
         _visual = GetComponentInChildren<SpriteRenderer>();
+        ChangeVisual();
+
         main = Camera.main;
 
         screenBounds = main.ScreenToWorldPoint(
@@ -47,7 +52,18 @@ public class EnemyCollider : MonoBehaviour
 
     private void ActiveVisual(bool value)
     {
+        if (!value)
+        {
+            ChangeVisual();
+        }
+
         _visual.enabled = value;
+    }
+
+    private void ChangeVisual()
+    {
+        int idr = Random.Range(0, _enemyVisual.Visuals.Length);
+        _visual.sprite = _enemyVisual.Visuals[idr];
     }
 
     private void CheckTap(EnemyCollider area)
@@ -72,7 +88,7 @@ public class EnemyCollider : MonoBehaviour
 
     public Vector2 GetScreenLimits()
     {
-        return new Vector2((screenBounds.x - objectWidth) - offset, 3f);
+        return new Vector2((screenBounds.x - objectWidth) - offset, 1.8f);
     }
 
     public void SpawnEnemy(Vector3 position)

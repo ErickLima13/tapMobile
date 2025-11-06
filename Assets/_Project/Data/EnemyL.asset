@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f799186f0a9f935408eeb8d404599747, type: 3}
+  m_Name: EnemyL
+  m_EditorClassIdentifier: 
+  Visuals:
+  - {fileID: 21300000, guid: a59bf056988e4e741b681b57b8458d0d, type: 3}
+  - {fileID: 21300000, guid: dadc596a3ff81ce4d8f66eae9135d57e, type: 3}
+  - {fileID: 21300000, guid: d82a68d79b57a7e41a9b37901fce95d2, type: 3}
+  - {fileID: 21300000, guid: 7ae6ed05a57c7bf42ba7c23408428689, type: 3}
+  - {fileID: 21300000, guid: 3bc0c959a8b051c42bfa610cebac00dc, type: 3}
+  - {fileID: 21300000, guid: 0727a567a8c25164b9bd290609722ec5, type: 3}
+  - {fileID: 21300000, guid: 86731def16cef82419b1a2a730f70d71, type: 3}
