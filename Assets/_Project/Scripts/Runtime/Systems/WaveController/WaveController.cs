@@ -11,6 +11,8 @@ public class WaveController : MonoBehaviour
     private const float _maxTime = 2f;
     private const float _minTime = 0.5f;
 
+    [SerializeField] private float _minBottom, _maxBottom;
+
     public Vector2 _distance;
     private Dictionary<ScreenPositions, EnemyCollider> _areasMap = new();
 
@@ -50,7 +52,7 @@ public class WaveController : MonoBehaviour
             }
 
             float randomX = Random.Range(-_distance.x, _distance.x);
-            float randomY = Random.Range(-_distance.y, _distance.y);
+            float randomY = Random.Range(_minBottom, _maxBottom);
 
             enemies.Add(new()
             {
