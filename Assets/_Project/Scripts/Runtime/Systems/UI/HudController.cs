@@ -9,8 +9,11 @@ public class HudController : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private Image[] _livesImg;
+    [SerializeField] private Sprite[] _pauseImg;
 
-    public Button _pauseButton;
+    public GameObject _pausePanel;
+
+    public Image _pauseButton;
 
     public bool isPause;
 
@@ -40,6 +43,8 @@ public class HudController : MonoBehaviour
         // delay para quando voltar do pause
 
         isPause = !isPause;
+        _pausePanel.SetActive(isPause);
+        _pauseButton.sprite = isPause ? _pauseImg[0] : _pauseImg[1];
         Time.timeScale = isPause ? 0f : 1f;
     }
 

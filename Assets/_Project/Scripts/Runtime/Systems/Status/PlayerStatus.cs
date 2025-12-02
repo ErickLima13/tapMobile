@@ -12,6 +12,8 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] private int _maxLife;
     [SerializeField] private int _currentLife;
 
+    [SerializeField] private Animator _playerAnimator;
+
     private void Start()
     {
         _currentLife = _maxLife;
@@ -41,6 +43,7 @@ public class PlayerStatus : MonoBehaviour
         if (_currentLife <= _maxLife)
         {
             _currentLife--;
+            _playerAnimator.Play("playerHit");
             if (_currentLife <= 0)
             {
                 _currentLife = 0;
