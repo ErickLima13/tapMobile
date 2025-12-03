@@ -1028,6 +1028,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d46c0cb810b2c4eb244af75f814215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _fireballVfx: {fileID: 11400000, guid: f210487aa0b72274485c6d2616103a85, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

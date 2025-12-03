@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.maneuver.soundsystem": {
+      "version": "https://github.com/Maneuver-Studio/SoundSystem.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "69a4f199d1b41ce444509c8a3450732fc6b3004d"
+    },
     "com.unity.2d.animation": {
       "version": "10.1.4",
       "depth": 1,
