@@ -728,6 +728,7 @@ GameObject:
   - component: {fileID: 1229715984}
   - component: {fileID: 1229715983}
   - component: {fileID: 1229715982}
+  - component: {fileID: 1229715985}
   m_Layer: 5
   m_Name: OptionsButton
   m_TagString: Untagged
@@ -798,7 +799,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1229715983}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1229715985}
+        m_TargetAssemblyTypeName: CreateSettingsPanel, Assembly-CSharp
+        m_MethodName: CreateSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1229715983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -837,6 +850,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1229715980}
   m_CullTransparentMesh: 1
+--- !u!114 &1229715985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229715980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a1e02613f4009b4b838aaaa55fb8311, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canvasGroup: {fileID: 1994972871}
+  _settingsPrefab: {fileID: 1950870353733289769, guid: 4717d791e561ffc4485d2e00c6c933bd, type: 3}
+  _parentSettings: {fileID: 1588416726}
 --- !u!1 &1245231388
 GameObject:
   m_ObjectHideFlags: 0
@@ -1442,6 +1470,7 @@ GameObject:
   - component: {fileID: 1994972869}
   - component: {fileID: 1994972868}
   - component: {fileID: 1994972870}
+  - component: {fileID: 1994972871}
   m_Layer: 5
   m_Name: ButtonsPanel
   m_TagString: Untagged
@@ -1533,6 +1562,18 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 15}
   m_Constraint: 0
   m_ConstraintCount: 2
+--- !u!225 &1994972871
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1994972866}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
