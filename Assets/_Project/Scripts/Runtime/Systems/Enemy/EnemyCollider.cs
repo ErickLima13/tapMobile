@@ -15,11 +15,12 @@ public class EnemyCollider : MonoBehaviour
 
     public event Action<PointType> OnTapResult;
 
-    public ScreenPositions position;
-
     [SerializeField] private EnemyVisual _enemyVisual;
+    [SerializeField] private Enemy _enemySO;
 
     private SpriteRenderer _visual;
+
+    public int lifes;
 
     #region ScreenLimit
 
@@ -48,6 +49,9 @@ public class EnemyCollider : MonoBehaviour
     private void Start()
     {
         _checkTapAction.OnTapCollider += CheckTap;
+
+        _visual.sprite = _enemySO.Visual;
+        lifes = _enemySO.Lifes;
     }
 
     private void ActiveVisual(bool value)
@@ -73,9 +77,15 @@ public class EnemyCollider : MonoBehaviour
             return;
         }
 
-        ActiveVisual(false);
-
-        OnTapResult?.Invoke(PointType.Score);
+        if (lifes > 1)
+        {
+            lifes--;
+        }
+        else
+        {
+             ActiveVisual(false);
+            OnTapResult?.Invoke(PointType.Score);
+        }
 
         print("acertei");
     }

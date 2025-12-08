@@ -12,9 +12,9 @@ public class WaveController : MonoBehaviour
     private const float _minTime = 0.5f;
 
     [SerializeField] private float _minBottom, _maxBottom;
+    [SerializeField] private List<Wave> _waves;
 
     public Vector2 _distance;
-    private Dictionary<ScreenPositions, EnemyCollider> _areasMap = new();
 
     public int _totalEnemies;
 
@@ -26,7 +26,6 @@ public class WaveController : MonoBehaviour
 
     private void Start()
     {
-        foreach (EnemyCollider a in _enemiesColliders) _areasMap.Add(a.position, a);
 
         _distance = _enemiesColliders[0].GetScreenLimits();
         _ = StartWave(1);
@@ -44,21 +43,17 @@ public class WaveController : MonoBehaviour
         for (int i = 0; i < numberOfEnemies; i++)
         {
             float time = Random.Range(_minTime, _maxTime);
-            ScreenPositions position = ScreenPositions.Left;
+           
 
-            if (Random.Range(0f, 1f) < 0.5f)
-            {
-                position = ScreenPositions.Right;
-            }
+          
 
             float randomX = Random.Range(-_distance.x, _distance.x);
             float randomY = Random.Range(_minBottom, _maxBottom);
 
             enemies.Add(new()
             {
-                activeTime = time,
-                position = position,
-                worldPosition = new(randomX, randomY),
+              
+                WorldPosition = new(randomX, randomY),
             });
         }
 
@@ -75,15 +70,15 @@ public class WaveController : MonoBehaviour
         for (int i = 0; i < enemies.Count; i++)
         {
             var enemy = enemies[i];
-            var enemyCollider = _areasMap[enemy.position];
+           // var enemyCollider = _areasMap[enemy.position];
 
-            enemyCollider.SpawnEnemy(enemy.worldPosition);
+           // enemyCollider.SpawnEnemy(enemy.worldPosition);
 
-            _currentTime = enemy.activeTime;
+            //_currentTime = enemy.activeTime;
 
             await UniTask.WaitForSeconds(_currentTime);
 
-            enemyCollider.CheckDamage();
+          //  enemyCollider.CheckDamage();
         }
 
         await UniTask.WaitForEndOfFrame();
@@ -96,6 +91,6 @@ public class WaveController : MonoBehaviour
 [System.Serializable]
 public struct Wave
 {
-    public List<Enemy> Activetimes;
+    public List<Enemy> Enemies;
     public int WaveLevel;
 }

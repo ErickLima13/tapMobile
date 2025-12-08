@@ -1,14 +1,12 @@
 using UnityEngine;
 
-public class Enemy
+[CreateAssetMenu(fileName = "Enemy", menuName = "Scriptable Objects/Enemy")]
+public class Enemy : ScriptableObject
 {
-    public ScreenPositions position;
-    public float activeTime;
-    public Vector2 worldPosition;
+    public float Speed;
+    public int Lifes;
+    public Vector2 WorldPosition;
+    public Sprite Visual;
 }
 
-public enum ScreenPositions
-{
-    Left,
-    Right
-}
+

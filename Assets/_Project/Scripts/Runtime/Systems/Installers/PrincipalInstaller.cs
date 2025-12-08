@@ -11,7 +11,6 @@ public class PrincipalInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.Bind<EnemyCollider>().FromInstance(_areasColliders[0]);
-        Container.Bind<EnemyCollider>().FromInstance(_areasColliders[1]);
 
         Container.Bind<CheckTapAction>().FromInstance(_checkTapAction);
         Container.Bind<PlayerStatus>().FromInstance(_playerStatus);
