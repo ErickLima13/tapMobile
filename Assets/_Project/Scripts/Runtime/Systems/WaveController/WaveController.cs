@@ -27,7 +27,7 @@ public class WaveController : MonoBehaviour
     private void Start()
     {
 
-        _distance = _enemiesColliders[0].GetScreenLimits();
+       // _distance = _enemiesColliders[0].GetScreenLimits();
         _ = StartWave(1);
     }
 

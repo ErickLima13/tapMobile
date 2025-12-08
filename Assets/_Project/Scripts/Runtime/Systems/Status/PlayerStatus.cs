@@ -4,7 +4,8 @@ using Zenject;
 
 public class PlayerStatus : MonoBehaviour
 {
-    [Inject] private EnemyCollider[] _enemiesColliders;
+    [Inject] private DamagePlayer _damagePlayer;
+    [Inject] private CheckTapAction _checkTapAction;
 
     public event Action<PointType, int> OnUpdateHud;
 
@@ -18,24 +19,20 @@ public class PlayerStatus : MonoBehaviour
     {
         _currentLife = _maxLife;
 
-        foreach (EnemyCollider a in _enemiesColliders)
-        {
-            a.OnTapResult += TapResult;
-        }
+        _damagePlayer.OnDamageEvent += DamageEvent;
+        _checkTapAction.OnEnemyDied += IncreaseScore;
     }
 
-    private void TapResult(PointType value)
+    private void IncreaseScore(PointType value)
     {
-        if (value == PointType.Score)
-        {
-            _score++;
-            OnUpdateHud?.Invoke(value, _score);
-        }
-        else
-        {
-            TakeDamage();
-            OnUpdateHud?.Invoke(value, _currentLife);
-        }
+        _score++;
+        OnUpdateHud?.Invoke(value, _score);
+    }
+
+    private void DamageEvent(PointType value)
+    {
+        TakeDamage();
+        OnUpdateHud?.Invoke(value, _currentLife);
     }
 
     private void TakeDamage()
@@ -53,10 +50,8 @@ public class PlayerStatus : MonoBehaviour
 
     private void OnDisable()
     {
-        foreach (EnemyCollider a in _enemiesColliders)
-        {
-            a.OnTapResult -= TapResult;
-        }
+        _damagePlayer.OnDamageEvent -= DamageEvent;
+        _checkTapAction.OnEnemyDied -= IncreaseScore;
     }
 }
 

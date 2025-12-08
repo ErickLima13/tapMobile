@@ -8,6 +8,7 @@ public class CheckTapAction : MonoBehaviour
     private Camera _mainCamera;
 
     public event Action<EnemyCollider> OnTapCollider;
+    public event Action<PointType> OnEnemyDied;
 
     [SerializeField] private InputActionAsset _inputActions;
     [SerializeField] private LayerMask _layerCollider;
@@ -50,13 +51,28 @@ public class CheckTapAction : MonoBehaviour
     private void OnEnable()
     {
         _inputActions.FindAction("Point").performed += context => { _curScreenPos = context.ReadValue<Vector2>(); };
-        _inputActions.FindAction("Click").performed += _ => { if (IsClickedOn) OnTapCollider?.Invoke(_enemyCollider); };
+        _inputActions.FindAction("Click").performed += _ => OnIsClicked();
+        
+    }
+
+    private void OnIsClicked()
+    {
+        if (IsClickedOn)
+        {
+            OnTapCollider?.Invoke(_enemyCollider);
+
+            if (_enemyCollider.GetIsDied())
+            {
+                OnEnemyDied?.Invoke(PointType.Score);
+            }
+        }
     }
 
     private void OnDisable()
     {
         _inputActions.FindAction("Point").performed -= context => { _curScreenPos = context.ReadValue<Vector2>(); };
-        _inputActions.FindAction("Click").performed -= _ => { if (IsClickedOn) OnTapCollider?.Invoke(_enemyCollider); };
-
+        _inputActions.FindAction("Click").performed -= _ => OnIsClicked();
     }
+
+
 }

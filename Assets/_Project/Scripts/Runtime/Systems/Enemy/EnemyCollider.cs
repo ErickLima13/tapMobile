@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using Zenject;
-using Random = UnityEngine.Random;
 
 public enum PointType
 {
@@ -22,6 +21,8 @@ public class EnemyCollider : MonoBehaviour
 
     public int lifes;
 
+    private bool isDied;
+
     #region ScreenLimit
 
     private Vector2 screenBounds;
@@ -36,7 +37,10 @@ public class EnemyCollider : MonoBehaviour
     private void Awake()
     {
         _visual = GetComponentInChildren<SpriteRenderer>();
-        ChangeVisual();
+
+
+        _visual.sprite = _enemySO.Visual;
+        lifes = _enemySO.Lifes;
 
         main = Camera.main;
 
@@ -49,25 +53,11 @@ public class EnemyCollider : MonoBehaviour
     private void Start()
     {
         _checkTapAction.OnTapCollider += CheckTap;
-
-        _visual.sprite = _enemySO.Visual;
-        lifes = _enemySO.Lifes;
     }
 
     private void ActiveVisual(bool value)
     {
-        if (!value)
-        {
-            ChangeVisual();
-        }
-
         _visual.enabled = value;
-    }
-
-    private void ChangeVisual()
-    {
-        int idr = Random.Range(0, _enemyVisual.Visuals.Length);
-        _visual.sprite = _enemyVisual.Visuals[idr];
     }
 
     private void CheckTap(EnemyCollider area)
@@ -83,18 +73,15 @@ public class EnemyCollider : MonoBehaviour
         }
         else
         {
-             ActiveVisual(false);
+            ActiveVisual(false);
+            isDied = true;
             OnTapResult?.Invoke(PointType.Score);
         }
 
         print("acertei");
     }
 
-    private void TakeDamage()
-    {
-        OnTapResult?.Invoke(PointType.Damage);
-        print("Dano");
-    }
+    public bool GetIsDied() { return isDied; }
 
     public Vector2 GetScreenLimits()
     {
@@ -105,15 +92,6 @@ public class EnemyCollider : MonoBehaviour
     {
         transform.position = position;
         ActiveVisual(true);
-    }
-
-    public void CheckDamage()
-    {
-        if (_visual.enabled)
-        {
-            ActiveVisual(false);
-            TakeDamage();
-        }
     }
 
     private void OnDisable()
