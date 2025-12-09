@@ -5,7 +5,7 @@ public class EnemyChase : MonoBehaviour
     public Transform target;
     public float speed;
 
-    public bool isready;
+    public bool isReady;
 
     private void Start()
     {
@@ -14,7 +14,7 @@ public class EnemyChase : MonoBehaviour
 
     private void Update()
     {
-        if (isready)
+        if (isReady)
         {
             transform.Translate(speed * Time.deltaTime * Vector3.down);
         }
@@ -22,7 +22,7 @@ public class EnemyChase : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        isready = false;
+        isReady = false;
     }
 
 }

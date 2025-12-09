@@ -10,6 +10,7 @@ public class DamagePlayer : MonoBehaviour
         if (collision.TryGetComponent<EnemyCollider>(out EnemyCollider enemy))
         {
             OnDamageEvent?.Invoke(PointType.Damage);
+            enemy.ActiveVisual(false);
         }
     }
 

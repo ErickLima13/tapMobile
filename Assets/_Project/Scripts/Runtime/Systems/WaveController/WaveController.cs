@@ -10,8 +10,7 @@ public class WaveController : MonoBehaviour
 
     [SerializeField] private float _minBottom, _maxTop;
     [SerializeField] private List<Wave> _waves;
-
-    public Vector2 _distance;
+    [SerializeField] private LayerMask _enemyLayer;
 
     public int _totalEnemies;
 
@@ -21,75 +20,92 @@ public class WaveController : MonoBehaviour
 
     public GameObject _enemyPrefab;
 
+    public Collider2D _areaSpawn;
+
+
     private void Start()
     {
-        _distance = _screenLimits.GetScreenLimits();
-
-        float randomX = Random.Range(-_distance.x, _distance.x);
-        float randomY = Random.Range(_minBottom, _maxTop);
-
-        Vector3 pos = new(randomX, randomY);
-
-        GameObject temp = Instantiate(_enemyPrefab);
-        temp.GetComponent<EnemyCollider>().SpawnEnemy(pos, _waves[0].Enemies[0]);
-
-        // _ = StartWave(1);
-    }
-
-    private List<Enemy> CreateWave(int level)
-    {
-        //numero de inimigos minimos será 5, e o maximo será 5 * numero de waves.
-
-        int numberOfEnemies = Random.Range(5, 5 * level);
-        _totalEnemies = numberOfEnemies;
-
-        List<Enemy> enemies = new();
-
-        for (int i = 0; i < numberOfEnemies; i++)
-        {
-
-
-
-
-
-            float randomX = Random.Range(-_distance.x, _distance.x);
-            float randomY = Random.Range(_minBottom, _maxTop);
-
-            enemies.Add(new()
-            {
-
-
-            });
-        }
-
-        return enemies;
+        _ = StartWave(1);
     }
 
     private async Task StartWave(int level)
     {
-        _waveCount = level;
-        var enemies = CreateWave(level);
-
         await UniTask.WaitForEndOfFrame();
 
-        for (int i = 0; i < enemies.Count; i++)
+        _waveCount = level;
+        int numberOfEnemies = _waves[level - 1].Enemies.Count;
+        _totalEnemies = numberOfEnemies;
+
+        for (int i = 0; i < numberOfEnemies; i++)
         {
-            var enemy = enemies[i];
-            // var enemyCollider = _areasMap[enemy.position];
+            Vector2 pos = GetRandomSpawnPosition(_areaSpawn);
+            GameObject temp = Instantiate(_enemyPrefab, pos, Quaternion.identity);
+            temp.transform.SetParent(_areaSpawn.transform);
+            temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level - 1].Enemies[i]);
 
-            // enemyCollider.SpawnEnemy(enemy.worldPosition);
-
-            //_currentTime = enemy.activeTime;
-
-
-            //  enemyCollider.CheckDamage();
+            await UniTask.WaitForSeconds(2f);
         }
 
         await UniTask.WaitForEndOfFrame();
         level++;
-        _ = StartWave(level);
+        // _ = StartWave(level);
     }
 
+
+    private Vector2 GetRandomPosition(Collider2D collider)
+    {
+        Bounds colBounds = collider.bounds;
+
+        Vector2 minBounds = new(colBounds.min.x, colBounds.min.y);
+        Vector2 maxBounds = new(colBounds.max.x, colBounds.max.y);
+
+        float randomX = Random.Range(minBounds.x, maxBounds.x);
+        float randomY = Random.Range(minBounds.y, maxBounds.y);
+
+        return new(randomX, randomY);
+    }
+
+    private Vector2 GetRandomSpawnPosition(Collider2D collider)
+    {
+        Vector2 spawnPos = Vector2.zero;
+        bool isSpawnPosValid = false;
+
+        int count = 0;
+        int maxCount = 200;
+
+        int enemyLayer = LayerMask.NameToLayer("CheckTap");
+
+        while (!isSpawnPosValid && count < maxCount)
+        {
+            spawnPos = GetRandomPosition(collider);
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(spawnPos, 1f);
+
+            bool isInvalidCollision = false;
+
+            foreach (Collider2D col in colliders)
+            {
+                if (col.gameObject.layer == enemyLayer)
+                {
+                    isInvalidCollision = true;
+                    break;
+                }
+            }
+
+            if (!isInvalidCollision)
+            {
+                isSpawnPosValid = true;
+            }
+
+            count++;
+        }
+
+        if (!isSpawnPosValid)
+        {
+            Debug.LogWarning("not found valid pos");
+        }
+
+        return spawnPos;
+    }
 }
 
 [System.Serializable]

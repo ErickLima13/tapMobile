@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class ScreenLimits : MonoBehaviour
 {
-    private Vector2 screenBounds;
-    private float objectWidth;
-    private float objectHeight;
-    private float offset = 0.60f;
+    [SerializeField] private Vector2 screenBounds;
+
     private Camera main;
 
-    [SerializeField] private Sprite _spriteReference;
+    public GameObject _testArea;
 
     private void Awake()
     {
@@ -16,13 +14,11 @@ public class ScreenLimits : MonoBehaviour
 
         screenBounds = main.ScreenToWorldPoint(
             new Vector3(Screen.width, Screen.height, main.transform.position.z));
-        objectWidth = _spriteReference.bounds.size.x / 2;
-        objectHeight = _spriteReference.bounds.size.y / 2;
     }
 
-    public Vector2 GetScreenLimits()
+    private void Start()
     {
-        return new Vector2((screenBounds.x - objectWidth) - offset, 2.8f);
+        float x = screenBounds.x * 2 - 1f;
+        _testArea.transform.localScale = new Vector3(x, screenBounds.y + 1);
     }
-
 }

@@ -19,14 +19,15 @@ public class EnemyCollider : MonoBehaviour
     private bool died;
 
     [SerializeField] private SpriteRenderer _visual;
-
+    [SerializeField] private EnemyChase _enemyChase;
+    [SerializeField] private BoxCollider2D _boxCollider;
 
     private void Start()
     {
         _checkTapAction.OnTapCollider += CheckTap;
     }
 
-    private void ActiveVisual(bool value)
+    public void ActiveVisual(bool value)
     {
         _visual.enabled = value;
     }
@@ -46,6 +47,8 @@ public class EnemyCollider : MonoBehaviour
         {
             ActiveVisual(false);
             died = true;
+            _boxCollider.enabled = false;
+            _enemyChase.speed = 0;
             OnTapResult?.Invoke(PointType.Score);
         }
 
@@ -54,11 +57,12 @@ public class EnemyCollider : MonoBehaviour
 
     public bool GetIsDied() { return died; }
 
-    public void SpawnEnemy(Vector3 position,Enemy enemy)
+    public void SpawnEnemy(Enemy enemy)
     {
         _visual.sprite = enemy.Visual;
         lifes = enemy.Lifes;
-        transform.position = position;
+        _enemyChase.speed = enemy.Speed;
+        _enemyChase.isReady = true;
         ActiveVisual(true);
     }
 
