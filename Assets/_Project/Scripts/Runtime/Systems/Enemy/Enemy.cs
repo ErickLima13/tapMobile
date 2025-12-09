@@ -5,7 +5,6 @@ public class Enemy : ScriptableObject
 {
     public float Speed;
     public int Lifes;
-    public Vector2 WorldPosition;
     public Sprite Visual;
 }
 

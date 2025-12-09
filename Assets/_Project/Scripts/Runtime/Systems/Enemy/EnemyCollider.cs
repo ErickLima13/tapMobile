@@ -14,41 +14,12 @@ public class EnemyCollider : MonoBehaviour
 
     public event Action<PointType> OnTapResult;
 
-    [SerializeField] private EnemyVisual _enemyVisual;
-    [SerializeField] private Enemy _enemySO;
-
-    private SpriteRenderer _visual;
-
     public int lifes;
 
-    private bool isDied;
+    private bool died;
 
-    #region ScreenLimit
+    [SerializeField] private SpriteRenderer _visual;
 
-    private Vector2 screenBounds;
-    private float objectWidth;
-    private float objectHeight;
-    private float offset = 0.10f;
-    private Camera main;
-
-    #endregion
-
-
-    private void Awake()
-    {
-        _visual = GetComponentInChildren<SpriteRenderer>();
-
-
-        _visual.sprite = _enemySO.Visual;
-        lifes = _enemySO.Lifes;
-
-        main = Camera.main;
-
-        screenBounds = main.ScreenToWorldPoint(
-            new Vector3(Screen.width, Screen.height, main.transform.position.z));
-        objectWidth = _visual.bounds.size.x / 2;
-        objectHeight = _visual.bounds.size.y / 2;
-    }
 
     private void Start()
     {
@@ -74,22 +45,19 @@ public class EnemyCollider : MonoBehaviour
         else
         {
             ActiveVisual(false);
-            isDied = true;
+            died = true;
             OnTapResult?.Invoke(PointType.Score);
         }
 
         print("acertei");
     }
 
-    public bool GetIsDied() { return isDied; }
+    public bool GetIsDied() { return died; }
 
-    public Vector2 GetScreenLimits()
+    public void SpawnEnemy(Vector3 position,Enemy enemy)
     {
-        return new Vector2((screenBounds.x - objectWidth) - offset, 1.8f);
-    }
-
-    public void SpawnEnemy(Vector3 position)
-    {
+        _visual.sprite = enemy.Visual;
+        lifes = enemy.Lifes;
         transform.position = position;
         ActiveVisual(true);
     }
@@ -98,6 +66,4 @@ public class EnemyCollider : MonoBehaviour
     {
         _checkTapAction.OnTapCollider -= CheckTap;
     }
-
-
 }

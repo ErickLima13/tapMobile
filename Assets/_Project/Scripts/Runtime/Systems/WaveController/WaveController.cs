@@ -6,12 +6,9 @@ using Zenject;
 
 public class WaveController : MonoBehaviour
 {
-    [Inject] private EnemyCollider[] _enemiesColliders;
+    [Inject] private ScreenLimits _screenLimits;
 
-    private const float _maxTime = 2f;
-    private const float _minTime = 0.5f;
-
-    [SerializeField] private float _minBottom, _maxBottom;
+    [SerializeField] private float _minBottom, _maxTop;
     [SerializeField] private List<Wave> _waves;
 
     public Vector2 _distance;
@@ -20,15 +17,23 @@ public class WaveController : MonoBehaviour
 
     public int _waveCount;
 
-    public float _currentTime;
-
     public HudController hudController;
+
+    public GameObject _enemyPrefab;
 
     private void Start()
     {
+        _distance = _screenLimits.GetScreenLimits();
 
-       // _distance = _enemiesColliders[0].GetScreenLimits();
-        _ = StartWave(1);
+        float randomX = Random.Range(-_distance.x, _distance.x);
+        float randomY = Random.Range(_minBottom, _maxTop);
+
+        Vector3 pos = new(randomX, randomY);
+
+        GameObject temp = Instantiate(_enemyPrefab);
+        temp.GetComponent<EnemyCollider>().SpawnEnemy(pos, _waves[0].Enemies[0]);
+
+        // _ = StartWave(1);
     }
 
     private List<Enemy> CreateWave(int level)
@@ -42,18 +47,18 @@ public class WaveController : MonoBehaviour
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
-            float time = Random.Range(_minTime, _maxTime);
-           
 
-          
+
+
+
 
             float randomX = Random.Range(-_distance.x, _distance.x);
-            float randomY = Random.Range(_minBottom, _maxBottom);
+            float randomY = Random.Range(_minBottom, _maxTop);
 
             enemies.Add(new()
             {
-              
-                WorldPosition = new(randomX, randomY),
+
+
             });
         }
 
@@ -70,15 +75,14 @@ public class WaveController : MonoBehaviour
         for (int i = 0; i < enemies.Count; i++)
         {
             var enemy = enemies[i];
-           // var enemyCollider = _areasMap[enemy.position];
+            // var enemyCollider = _areasMap[enemy.position];
 
-           // enemyCollider.SpawnEnemy(enemy.worldPosition);
+            // enemyCollider.SpawnEnemy(enemy.worldPosition);
 
             //_currentTime = enemy.activeTime;
 
-            await UniTask.WaitForSeconds(_currentTime);
 
-          //  enemyCollider.CheckDamage();
+            //  enemyCollider.CheckDamage();
         }
 
         await UniTask.WaitForEndOfFrame();

@@ -18,8 +18,6 @@ public class EnemyChase : MonoBehaviour
         {
             transform.Translate(speed * Time.deltaTime * Vector3.down);
         }
-
-        print(Vector3.Distance(transform.position, target.position));
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
