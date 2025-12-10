@@ -14,11 +14,13 @@ public class ScreenLimits : MonoBehaviour
 
         screenBounds = main.ScreenToWorldPoint(
             new Vector3(Screen.width, Screen.height, main.transform.position.z));
+
+        float x = screenBounds.x * 2 - 1f;
+        _testArea.transform.localScale = new Vector3(x, screenBounds.y + 1);
     }
 
     private void Start()
     {
-        float x = screenBounds.x * 2 - 1f;
-        _testArea.transform.localScale = new Vector3(x, screenBounds.y + 1);
+      
     }
 }

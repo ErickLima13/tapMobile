@@ -57,12 +57,13 @@ public class EnemyCollider : MonoBehaviour
 
     public bool GetIsDied() { return died; }
 
-    public void SpawnEnemy(Enemy enemy)
+    public void SpawnEnemy(Enemy enemy,Vector3 position)
     {
         _visual.sprite = enemy.Visual;
         lifes = enemy.Lifes;
         _enemyChase.speed = enemy.Speed;
         _enemyChase.isReady = true;
+        transform.position = position;
         ActiveVisual(true);
     }
 

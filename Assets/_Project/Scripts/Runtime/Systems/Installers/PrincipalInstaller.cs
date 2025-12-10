@@ -10,6 +10,8 @@ public class PrincipalInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
+        Container.BindFactory<GameObject, Enemy, Vector3, EnemyCollider, EnemyFactory>().FromFactory<PrefabEnemyfactory>();
+
         Container.Bind<CheckTapAction>().FromInstance(_checkTapAction);
         Container.Bind<PlayerStatus>().FromInstance(_playerStatus);
         Container.Bind<DamagePlayer>().FromInstance(_damagePlayer);

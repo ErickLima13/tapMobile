@@ -6,7 +6,8 @@ using Zenject;
 
 public class WaveController : MonoBehaviour
 {
-    [Inject] private ScreenLimits _screenLimits;
+
+    [Inject] private EnemyFactory Factory;
 
     [SerializeField] private float _minBottom, _maxTop;
     [SerializeField] private List<Wave> _waves;
@@ -39,9 +40,7 @@ public class WaveController : MonoBehaviour
         for (int i = 0; i < numberOfEnemies; i++)
         {
             Vector2 pos = GetRandomSpawnPosition(_areaSpawn);
-            GameObject temp = Instantiate(_enemyPrefab, pos, Quaternion.identity);
-            temp.transform.SetParent(_areaSpawn.transform);
-            temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level - 1].Enemies[i]);
+            Factory.Create(_enemyPrefab,_waves[level - 1].Enemies[i],pos);
 
             await UniTask.WaitForSeconds(2f);
         }
