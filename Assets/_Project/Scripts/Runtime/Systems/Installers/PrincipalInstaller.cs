@@ -7,6 +7,7 @@ public class PrincipalInstaller : MonoInstaller
     [SerializeField] private PlayerStatus _playerStatus;
     [SerializeField] private DamagePlayer _damagePlayer;
     [SerializeField] private ScreenLimits _screenLimits;
+    [SerializeField] private ObjectPooler _objectPooler;
 
     public override void InstallBindings()
     {
@@ -16,5 +17,6 @@ public class PrincipalInstaller : MonoInstaller
         Container.Bind<PlayerStatus>().FromInstance(_playerStatus);
         Container.Bind<DamagePlayer>().FromInstance(_damagePlayer);
         Container.Bind<ScreenLimits>().FromInstance(_screenLimits);
+        Container.Bind<ObjectPooler>().FromInstance(_objectPooler);
     }
 }

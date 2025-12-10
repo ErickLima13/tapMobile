@@ -1,17 +1,19 @@
 using UnityEngine;
+using Zenject;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private SpawnFireEffect _spawnFireEffect;
+    [Inject] private CheckTapAction _checkTapAction;
+
 
     private void Start()
     {
-        _spawnFireEffect.OnAnimation += SetPosition;
+        _checkTapAction.OnAnimation += SetPosition;
     }
 
     private void OnDisable()
     {
-        _spawnFireEffect.OnAnimation -= SetPosition;
+        _checkTapAction.OnAnimation -= SetPosition;
     }
 
     private void SetPosition(float x)

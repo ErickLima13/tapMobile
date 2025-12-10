@@ -1,30 +1,24 @@
-using Maneuver.SoundSystem;
-using System;
 using UnityEngine;
 using Zenject;
 
-public class SpawnFireEffect : MonoBehaviour
+public class SpawnFireEffect : MonoBehaviour, IPooledObject
 {
-    [Inject] private IAudioManager _audioManager;
+    [Inject] private ObjectPooler _objectPooler;
 
-    [SerializeField] private AudioFileObject _fireballVfx;
-
-
-    public event Action<float> OnAnimation;
-
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
 
     private void Start()
     {
         _animator = GetComponent<Animator>();
     }
 
-    public void PlayAnimation(Vector3 position)
+    public void OnObjectSpawn()
     {
-        _audioManager.Play(_fireballVfx);
-        transform.position = position;
         _animator.Play("explosionTouch");
-        OnAnimation?.Invoke(position.x);
     }
 
+    public void EndAnimation()
+    {
+        _objectPooler.ReturnToPool("explosion", gameObject);
+    }
 }

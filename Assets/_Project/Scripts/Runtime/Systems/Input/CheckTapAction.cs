@@ -1,20 +1,28 @@
+using Maneuver.SoundSystem;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Zenject;
 
 public class CheckTapAction : MonoBehaviour
 {
+    [Inject] private ObjectPooler _objectPooler;
+    [Inject] private IAudioManager _audioManager;
+
     private Vector3 _curScreenPos;
     private Camera _mainCamera;
 
     public event Action<EnemyCollider> OnTapCollider;
     public event Action<PointType> OnEnemyDied;
+    public event Action<float> OnAnimation;
 
     [SerializeField] private InputActionAsset _inputActions;
     [SerializeField] private LayerMask _layerCollider;
 
     [SerializeField] private GameObject _clickedObject;
-    [SerializeField] private SpawnFireEffect _spawnFireEffect;
+
+    [SerializeField] private AudioFileObject _fireballVfx;
+
 
     private EnemyCollider _enemyCollider;
 
@@ -36,7 +44,12 @@ public class CheckTapAction : MonoBehaviour
             {
                 _clickedObject = hits[0].collider.gameObject;
                 _enemyCollider = _clickedObject.GetComponent<EnemyCollider>();
-                _spawnFireEffect.PlayAnimation(_clickedObject.transform.position);
+                Vector3 pos = _clickedObject.transform.position;
+                _objectPooler.SpawnFromPool("explosion", pos,Quaternion.identity);
+                _audioManager.Play(_fireballVfx);
+                OnAnimation?.Invoke(pos.x);
+
+
                 return true;
             }
             return false;
