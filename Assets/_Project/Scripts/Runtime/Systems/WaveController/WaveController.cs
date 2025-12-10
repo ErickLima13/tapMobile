@@ -34,7 +34,10 @@ public class WaveController : MonoBehaviour
 
     private void EnemyDied(PointType type)
     {
-        enemiesInScene--;
+        if (enemiesInScene > 0)
+        {
+            enemiesInScene--;
+        }
     }
 
     private List<Enemy> CreateWave(int level)
@@ -75,11 +78,14 @@ public class WaveController : MonoBehaviour
         for (int i = 0; i < numberOfEnemies; i++)
         {
             Vector2 pos = GetRandomSpawnPosition(_areaSpawn);
-       
+
             var e = Factory.Create(_enemyPrefab, _waves[level - 1].Enemies[i], pos);
             e.transform.SetParent(temp.transform);
 
-            await UniTask.WaitForSeconds(2f);
+
+            float randSpawn = Random.Range(0.2f, 2f);
+
+            await UniTask.WaitForSeconds(randSpawn);
         }
 
         await UniTask.WaitUntil(() => enemiesInScene == 0);
