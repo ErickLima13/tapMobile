@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class ScreenLimits : MonoBehaviour
@@ -15,12 +17,15 @@ public class ScreenLimits : MonoBehaviour
         screenBounds = main.ScreenToWorldPoint(
             new Vector3(Screen.width, Screen.height, main.transform.position.z));
 
-        float x = screenBounds.x * 2 - 1f;
-        _testArea.transform.localScale = new Vector3(x, screenBounds.y + 1);
+        _ = Delay();
     }
 
-    private void Start()
+    private async Task Delay()
     {
-      
+        await UniTask.WaitForEndOfFrame();
+
+        float x = screenBounds.x * 2 - 1f;
+        _testArea.transform.localScale = new Vector3(x, screenBounds.y + 1);
+
     }
 }

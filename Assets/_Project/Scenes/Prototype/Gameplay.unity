@@ -2404,16 +2404,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f9b6b6de0022ba4ca840c1678379245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minBottom: 0.5
-  _maxTop: 2.8
-  _waves:
-  - Enemies:
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    WaveLevel: 1
+  _waves: []
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -2422,6 +2413,19 @@ MonoBehaviour:
   hudController: {fileID: 787878873}
   _enemyPrefab: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
   _areaSpawn: {fileID: 1839905157}
+  _enemiesSO:
+  - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
+  - {fileID: 11400000, guid: 13446b1d051c8aa42a7cd9b1e6ef2a52, type: 2}
+  - {fileID: 11400000, guid: 43f8530345ef3164598830fde80be809, type: 2}
+  - {fileID: 11400000, guid: 245b1be828855a544ae1f095fa5fe2ed, type: 2}
+  - {fileID: 11400000, guid: d0db7e8bc0dbff1469cfc24a398481e9, type: 2}
+  - {fileID: 11400000, guid: 42c71fc092baeb54da052fdfffd3b9ed, type: 2}
+  - {fileID: 11400000, guid: 76195ede8709ba842861a72705d43327, type: 2}
+  - {fileID: 11400000, guid: 392052603f256624caf72dda0f906718, type: 2}
+  - {fileID: 11400000, guid: 4cfbbb6ec8e16874986072ae439dea14, type: 2}
+  - {fileID: 11400000, guid: efb222c381cfde7499f4c90970421c9a, type: 2}
+  - {fileID: 11400000, guid: b5fb3a6fd0a83d141a0d9fab38bbe4b4, type: 2}
+  - {fileID: 11400000, guid: cdd111797c1a20c4891d6864956c7f16, type: 2}
 --- !u!114 &787878873
 MonoBehaviour:
   m_ObjectHideFlags: 0
