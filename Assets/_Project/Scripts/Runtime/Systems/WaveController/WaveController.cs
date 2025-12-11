@@ -76,7 +76,7 @@ public class WaveController : MonoBehaviour
             Vector2 pos = GetRandomSpawnPosition(_areaSpawn);
 
             var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
-            temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level - 1].Enemies[i]);
+            _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level - 1].Enemies[i]);
 
             float randSpawn = Random.Range(0.2f, 2f);
 

@@ -2853,6 +2853,9 @@ MonoBehaviour:
   - tag: enemy
     prefab: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
     size: 15
+  - tag: effect
+    prefab: {fileID: 5642766282230003982, guid: 9927fff922793a144bb6cda70d2ed2e1, type: 3}
+    size: 15
 --- !u!1 &1112407961
 GameObject:
   m_ObjectHideFlags: 0
@@ -5003,6 +5006,7 @@ CanvasRenderer:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 379976316}
   - {fileID: 1507242100}
   - {fileID: 930660553}
   - {fileID: 519420032}
@@ -5015,4 +5019,3 @@ SceneRoots:
   - {fileID: 94959381}
   - {fileID: 1839905156}
   - {fileID: 1084185424}
-  - {fileID: 379976316}

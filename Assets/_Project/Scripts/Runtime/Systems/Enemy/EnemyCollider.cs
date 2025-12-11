@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using System;
+using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -22,6 +24,8 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
     [SerializeField] private SpriteRenderer _visual;
     [SerializeField] private EnemyChase _enemyChase;
     [SerializeField] private BoxCollider2D _boxCollider;
+
+    private SpawnEffect _spawnEffect;
 
     public void ActiveVisual(bool value)
     {
@@ -51,23 +55,38 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
 
     public bool GetIsDied() { return died; }
 
-    public void SpawnEnemy(Enemy enemy)
+    public async Task SpawnEnemy(Enemy enemy)
     {
+        _boxCollider.enabled = false;
+
+        await UniTask.WaitUntil(() => !_spawnEffect.IsAnimation());
+
+        _objectPooler.ReturnToPool("effect", _spawnEffect.gameObject);
+
         _checkTapAction.OnTapCollider += CheckTap;
-        _visual.sprite = enemy.Visual;
+
         lifes = enemy.Lifes;
+        died = false;
+
+        _visual.sprite = enemy.Visual;
+
         _enemyChase.speed = enemy.Speed;
         _enemyChase.isReady = true;
-        died = false;
+
         ActiveVisual(true);
+
+        _boxCollider.enabled = true;
     }
 
     private void OnDisable()
     {
+        _visual.sprite = null;
         _checkTapAction.OnTapCollider -= CheckTap;
     }
 
     public void OnObjectSpawn()
     {
+        var temp = _objectPooler.SpawnFromPool("effect", transform.position, Quaternion.identity);
+        _spawnEffect = temp.GetComponent<SpawnEffect>();
     }
 }
