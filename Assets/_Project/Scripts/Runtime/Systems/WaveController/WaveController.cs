@@ -7,7 +7,7 @@ using Zenject;
 public class WaveController : MonoBehaviour
 {
     [Inject] private CheckTapAction _checkTapAction;
-    [Inject] private EnemyFactory Factory;
+    [Inject] private ObjectPooler _objectPooler;
     [Inject] private DamagePlayer _damagePlayer;
 
     [SerializeField] private List<Wave> _waves;
@@ -53,10 +53,8 @@ public class WaveController : MonoBehaviour
         for (int i = 0; i < numberOfEnemies; i++)
         {
             int rand = Random.Range(0, _enemiesSO.Count);
-
             enemies.Add(_enemiesSO[rand]);
         }
-
 
         _waves.Add(new(enemies, level - 1));
 
@@ -72,16 +70,13 @@ public class WaveController : MonoBehaviour
         _waveCount = level;
         int numberOfEnemies = _waves[level - 1].Enemies.Count;
 
-        GameObject temp = new GameObject("Wave " + (level - 1));
-        temp.transform.SetParent(_areaSpawn.transform);
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
             Vector2 pos = GetRandomSpawnPosition(_areaSpawn);
 
-            var e = Factory.Create(_enemyPrefab, _waves[level - 1].Enemies[i], pos);
-            e.transform.SetParent(temp.transform);
-
+            var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
+            temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level - 1].Enemies[i]);
 
             float randSpawn = Random.Range(0.2f, 2f);
 

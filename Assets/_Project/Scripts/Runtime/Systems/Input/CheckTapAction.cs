@@ -44,11 +44,14 @@ public class CheckTapAction : MonoBehaviour
             {
                 _clickedObject = hits[0].collider.gameObject;
                 _enemyCollider = _clickedObject.GetComponent<EnemyCollider>();
-                Vector3 pos = _clickedObject.transform.position;
-                _objectPooler.SpawnFromPool("explosion", pos,Quaternion.identity);
-                _audioManager.Play(_fireballVfx);
-                OnAnimation?.Invoke(pos.x);
 
+                if (!_enemyCollider.GetIsDied())
+                {
+                    Vector3 pos = _clickedObject.transform.position;
+                    _objectPooler.SpawnFromPool("explosion", pos, Quaternion.identity);
+                    _audioManager.Play(_fireballVfx);
+                    OnAnimation?.Invoke(pos.x);
+                }
 
                 return true;
             }
@@ -65,7 +68,7 @@ public class CheckTapAction : MonoBehaviour
     {
         _inputActions.FindAction("Point").performed += context => { _curScreenPos = context.ReadValue<Vector2>(); };
         _inputActions.FindAction("Click").performed += _ => OnIsClicked();
-        
+
     }
 
     private void OnIsClicked()

@@ -1,8 +1,11 @@
 using System;
 using UnityEngine;
+using Zenject;
 
 public class DamagePlayer : MonoBehaviour
 {
+    [Inject] private ObjectPooler _objectPooler;
+
     public event Action<PointType> OnDamageEvent;
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -10,7 +13,8 @@ public class DamagePlayer : MonoBehaviour
         if (collision.TryGetComponent<EnemyCollider>(out EnemyCollider enemy))
         {
             OnDamageEvent?.Invoke(PointType.Damage);
-            enemy.ActiveVisual(false);
+            enemy.died = true;
+            _objectPooler.ReturnToPool("enemy", enemy.gameObject);
         }
     }
 

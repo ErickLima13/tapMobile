@@ -20,7 +20,7 @@ public class PrefabEnemyfactory : IFactory<GameObject, Enemy, Vector3, EnemyColl
     {
         var enemyCol = _container.InstantiatePrefab(prefab).GetComponent<EnemyCollider>();
         _container.BindInstance(enemyCol);
-        enemyCol.SpawnEnemy(enemy,pos);
+      //  enemyCol.SpawnEnemy(enemy,pos);
         return enemyCol;
     }
 
