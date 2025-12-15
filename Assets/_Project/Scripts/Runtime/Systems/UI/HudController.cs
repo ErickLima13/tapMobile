@@ -10,12 +10,15 @@ public class HudController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private Image[] _livesImg;
     [SerializeField] private Sprite[] _pauseImg;
+    [SerializeField] private GameObject _gameOverAnimation;
 
     public GameObject _pausePanel;
 
     public Image _pauseButton;
 
     public bool isPause;
+
+    public bool isGameOver;
 
     private void Start()
     {
@@ -35,6 +38,11 @@ public class HudController : MonoBehaviour
         {
             _livesImg[total].enabled = false;
             print(total);
+
+            if(total == 0)
+            {
+                GameOver();
+            }
         }
     }
 
@@ -51,5 +59,16 @@ public class HudController : MonoBehaviour
     private void OnDisable()
     {
         _playerStatus.OnUpdateHud -= UpdateHud;
+    }
+
+    private void GameOver()
+    {
+        if (isGameOver)
+        {
+            return;
+        }
+
+        isGameOver = true;
+        Instantiate(_gameOverAnimation);
     }
 }

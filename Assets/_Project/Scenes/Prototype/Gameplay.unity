@@ -2372,9 +2372,11 @@ MonoBehaviour:
   _pauseImg:
   - {fileID: 57014881111040379, guid: e14d1450f65d30246a8935fc821105a0, type: 3}
   - {fileID: 4666030741728416337, guid: e14d1450f65d30246a8935fc821105a0, type: 3}
+  _gameOverAnimation: {fileID: 5339739117810204693, guid: 8086b456d5b7fd74185e414a9924f807, type: 3}
   _pausePanel: {fileID: 2139035688}
   _pauseButton: {fileID: 2082127247}
   isPause: 0
+  isGameOver: 0
 --- !u!114 &787878874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2855,6 +2857,9 @@ MonoBehaviour:
     size: 15
   - tag: effect
     prefab: {fileID: 5642766282230003982, guid: 9927fff922793a144bb6cda70d2ed2e1, type: 3}
+    size: 15
+  - tag: smoke
+    prefab: {fileID: 141433446842962269, guid: 6c20a7db0fabbb74fb3305105453e2ac, type: 3}
     size: 15
 --- !u!1 &1112407961
 GameObject:

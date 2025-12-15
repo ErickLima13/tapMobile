@@ -25,7 +25,7 @@ public class ScreenLimits : MonoBehaviour
         await UniTask.WaitForEndOfFrame();
 
         float x = screenBounds.x * 2 - 1f;
-        _testArea.transform.localScale = new Vector3(x, screenBounds.y + 1);
+        _testArea.transform.localScale = new Vector3(x, screenBounds.y);
 
     }
 }

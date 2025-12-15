@@ -9,6 +9,7 @@ public class WaveController : MonoBehaviour
     [Inject] private CheckTapAction _checkTapAction;
     [Inject] private ObjectPooler _objectPooler;
     [Inject] private DamagePlayer _damagePlayer;
+    [Inject] private PlayerStatus _playerStatus;
 
     [SerializeField] private List<Wave> _waves;
     [SerializeField] private LayerMask _enemyLayer;
@@ -23,13 +24,25 @@ public class WaveController : MonoBehaviour
     [SerializeField] private int _totalEnemies;
     [SerializeField] private int enemiesInScene;
 
+    private List<EnemyCollider> _currentWave = new();
 
     private void Start()
     {
         _checkTapAction.OnEnemyDied += EnemyDied;
         _damagePlayer.OnDamageEvent += EnemyDied;
+        _playerStatus.OnGameOver += StopWave;
 
         _ = StartWave(1);
+    }
+
+    private void StopWave()
+    {
+        foreach (EnemyCollider e in _currentWave)
+        {
+            e.gameObject.SetActive(false);
+        }
+
+        enabled = false;
     }
 
     private void EnemyDied(PointType type)
@@ -78,12 +91,16 @@ public class WaveController : MonoBehaviour
             var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
             _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level - 1].Enemies[i]);
 
+            _currentWave.Add(temp.GetComponent<EnemyCollider>());
+
             float randSpawn = Random.Range(0.2f, 2f);
 
             await UniTask.WaitForSeconds(randSpawn);
         }
 
         await UniTask.WaitUntil(() => enemiesInScene == 0);
+
+        _currentWave.Clear();
 
         level++;
         _ = StartWave(level);
@@ -149,6 +166,7 @@ public class WaveController : MonoBehaviour
     {
         _checkTapAction.OnEnemyDied -= EnemyDied;
         _damagePlayer.OnDamageEvent -= EnemyDied;
+        _playerStatus.OnGameOver -= StopWave;
     }
 }
 

@@ -4,6 +4,7 @@ using Zenject;
 public class PlayerMovement : MonoBehaviour
 {
     [Inject] private CheckTapAction _checkTapAction;
+    [Inject] private ObjectPooler _objectPooler;
 
 
     private void Start()
@@ -18,6 +19,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetPosition(float x)
     {
+        float currentX = transform.position.x;
+
+        if (x != currentX)
+        {
+            _objectPooler.SpawnFromPoolWithReturn("smoke", transform.position, Quaternion.identity);
+        }
+
         transform.position = new(x, transform.position.y);
+
     }
 }

@@ -9,6 +9,8 @@ public class PlayerStatus : MonoBehaviour
 
     public event Action<PointType, int> OnUpdateHud;
 
+    public event Action OnGameOver;
+
     [SerializeField] private int _score;
     [SerializeField] private int _maxLife;
     [SerializeField] private int _currentLife;
@@ -44,6 +46,7 @@ public class PlayerStatus : MonoBehaviour
             if (_currentLife <= 0)
             {
                 _currentLife = 0;
+                OnGameOver?.Invoke();
             }
         }
     }
