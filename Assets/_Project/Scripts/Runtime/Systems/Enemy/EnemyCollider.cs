@@ -2,7 +2,9 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using Zenject;
+using static UnityEngine.Rendering.DebugUI;
 
 public enum PointType
 {
@@ -24,12 +26,14 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
     [SerializeField] private SpriteRenderer _visual;
     [SerializeField] private EnemyChase _enemyChase;
     [SerializeField] private BoxCollider2D _boxCollider;
+    [SerializeField] private Light2D _light2d;
 
     private SpawnEffect _spawnEffect;
 
     public void ActiveVisual(bool value)
     {
         _visual.enabled = value;
+        _light2d.enabled = value;
     }
 
     private void CheckTap(EnemyCollider area)
@@ -69,6 +73,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         died = false;
 
         _visual.sprite = enemy.Visual;
+        _light2d.lightCookieSprite = enemy.Visual;
 
         _enemyChase.speed = enemy.Speed;
         _enemyChase.isReady = true;
@@ -81,6 +86,8 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
     private void OnDisable()
     {
         _visual.sprite = null;
+        _light2d.lightCookieSprite = null;
+        _light2d.enabled = false;
         _checkTapAction.OnTapCollider -= CheckTap;
     }
 

@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
@@ -26,13 +27,19 @@ public class WaveController : MonoBehaviour
 
     private List<EnemyCollider> _currentWave = new();
 
+    private bool _cantStartWave;
+
+    private CancellationTokenSource cancellationTokenSource = new();
+
     private void Start()
     {
+        CancellationToken cancellationToken = cancellationTokenSource.Token;
+
         _checkTapAction.OnEnemyDied += EnemyDied;
         _damagePlayer.OnDamageEvent += EnemyDied;
         _playerStatus.OnGameOver += StopWave;
 
-        _ = StartWave(1);
+        _ = StartWave(0,cancellationToken);
     }
 
     private void StopWave()
@@ -42,7 +49,9 @@ public class WaveController : MonoBehaviour
             e.gameObject.SetActive(false);
         }
 
-        enabled = false;
+        cancellationTokenSource.Cancel();
+
+        _cantStartWave = true;
     }
 
     private void EnemyDied(PointType type)
@@ -63,38 +72,41 @@ public class WaveController : MonoBehaviour
 
         List<Enemy> enemies = new();
 
-        for (int i = 0; i < numberOfEnemies; i++)
+        if(level > 1)
         {
-            int rand = Random.Range(0, _enemiesSO.Count);
-            enemies.Add(_enemiesSO[rand]);
-        }
+            for (int i = 0; i < numberOfEnemies; i++)
+            {
+                int rand = Random.Range(0, level);
+                enemies.Add(_enemiesSO[rand]);
+            }
 
-        _waves.Add(new(enemies, level - 1));
+            _waves.Add(new(enemies, level));
+        }
 
         return enemies;
     }
 
-    private async Task StartWave(int level)
+    private async Task StartWave(int level, CancellationToken cancellationToken)
     {
+        if (_cantStartWave)
+        {
+            return;
+        }
+
         CreateWave(level);
 
         await UniTask.WaitForEndOfFrame();
 
         _waveCount = level;
-        int numberOfEnemies = _waves[level - 1].Enemies.Count;
-
+        int numberOfEnemies = _waves[level].Enemies.Count;
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
             Vector2 pos = GetRandomSpawnPosition(_areaSpawn);
-
             var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
-            _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level - 1].Enemies[i]);
-
+            _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level].Enemies[i]);
             _currentWave.Add(temp.GetComponent<EnemyCollider>());
-
             float randSpawn = Random.Range(0.2f, 2f);
-
             await UniTask.WaitForSeconds(randSpawn);
         }
 
@@ -103,7 +115,8 @@ public class WaveController : MonoBehaviour
         _currentWave.Clear();
 
         level++;
-        _ = StartWave(level);
+
+        _ = StartWave(level, cancellationToken);
     }
 
 
@@ -167,6 +180,12 @@ public class WaveController : MonoBehaviour
         _checkTapAction.OnEnemyDied -= EnemyDied;
         _damagePlayer.OnDamageEvent -= EnemyDied;
         _playerStatus.OnGameOver -= StopWave;
+    }
+
+    private void OnDestroy()
+    {
+        cancellationTokenSource?.Cancel();
+        cancellationTokenSource?.Dispose();
     }
 }
 

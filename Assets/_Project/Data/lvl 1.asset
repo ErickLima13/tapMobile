@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a38399b980a29842913dbd9a239e65b, type: 3}
   m_Name: lvl 1
   m_EditorClassIdentifier: 
-  Speed: 0.09
+  Speed: 1
   Lifes: 1
   Visual: {fileID: 21300000, guid: a59bf056988e4e741b681b57b8458d0d, type: 3}

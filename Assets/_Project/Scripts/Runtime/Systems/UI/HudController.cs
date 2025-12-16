@@ -14,15 +14,21 @@ public class HudController : MonoBehaviour
 
     public GameObject _pausePanel;
 
+    public GameObject[] _buttonsPausePanel;
+
     public Image _pauseButton;
 
     public bool isPause;
 
     public bool isGameOver;
 
+    public int count = 2;
+
     private void Start()
     {
         Screen.orientation = ScreenOrientation.Portrait;
+
+        _pausePanel.SetActive(false);
 
         UpdateHud(PointType.Score, 0);
         _playerStatus.OnUpdateHud += UpdateHud;
@@ -36,8 +42,13 @@ public class HudController : MonoBehaviour
         }
         else
         {
-            _livesImg[total].enabled = false;
-            print(total);
+            if(count >= 0)
+            {
+                _livesImg[count].enabled = false;
+                count--;
+            }
+
+            print(count);
 
             if(total == 0)
             {
@@ -69,6 +80,15 @@ public class HudController : MonoBehaviour
         }
 
         isGameOver = true;
-        Instantiate(_gameOverAnimation);
+        Vector2 posGameOver = new(0, 2);
+
+        GameObject temp =  Instantiate(_gameOverAnimation);
+        temp.transform.position = posGameOver;
+
+        _pauseButton.gameObject.SetActive(false);
+        _buttonsPausePanel[0].SetActive(true);
+        _buttonsPausePanel[1].SetActive(false);
+        _pausePanel.SetActive(true);
+
     }
 }
