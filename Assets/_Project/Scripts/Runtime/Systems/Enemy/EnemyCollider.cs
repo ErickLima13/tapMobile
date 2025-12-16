@@ -73,7 +73,6 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         died = false;
 
         _visual.sprite = enemy.Visual;
-        _light2d.lightCookieSprite = enemy.Visual;
 
         _enemyChase.speed = enemy.Speed;
         _enemyChase.isReady = true;
@@ -86,7 +85,6 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
     private void OnDisable()
     {
         _visual.sprite = null;
-        _light2d.lightCookieSprite = null;
         _light2d.enabled = false;
         _checkTapAction.OnTapCollider -= CheckTap;
     }

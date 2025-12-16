@@ -11,6 +11,7 @@ public class WaveController : MonoBehaviour
     [Inject] private ObjectPooler _objectPooler;
     [Inject] private DamagePlayer _damagePlayer;
     [Inject] private PlayerStatus _playerStatus;
+    [Inject] private ScreenLimits _screenLimits;
 
     [SerializeField] private List<Wave> _waves;
     [SerializeField] private LayerMask _enemyLayer;
@@ -29,6 +30,8 @@ public class WaveController : MonoBehaviour
 
     private bool _cantStartWave;
 
+    public List<Transform> _spawnPositions = new();
+
     private CancellationTokenSource cancellationTokenSource = new();
 
     private void Start()
@@ -40,6 +43,25 @@ public class WaveController : MonoBehaviour
         _playerStatus.OnGameOver += StopWave;
 
         _ = StartWave(0,cancellationToken);
+
+        Vector2 area = _screenLimits.GetLimits();
+
+        GameObject parent = new("SpawnAreas");
+
+        for (int i = 1; i < 5; i++)
+        {
+            for(int x = 0; x < 4; x++)
+            {
+                GameObject temp = new("area " + i + $"-{x}");
+
+                Vector2 newArea = new(area.x - 1 - x, i);
+
+                temp.transform.position = newArea;
+                temp.transform.SetParent(parent.transform);
+
+                _spawnPositions.Add(temp.transform);
+            }
+        }
     }
 
     private void StopWave()
@@ -102,7 +124,10 @@ public class WaveController : MonoBehaviour
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
-            Vector2 pos = GetRandomSpawnPosition(_areaSpawn);
+            int rand = Random.Range(0, _spawnPositions.Count);
+
+            Vector2 pos = _spawnPositions[rand].position;
+
             var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
             _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level].Enemies[i]);
             _currentWave.Add(temp.GetComponent<EnemyCollider>());
