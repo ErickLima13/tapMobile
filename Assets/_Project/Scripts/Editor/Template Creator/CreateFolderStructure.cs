@@ -1,6 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
+
 public class CreateFolderStructure : EditorWindow
 {
     private static string rootFolderName = "_Project";
@@ -78,3 +80,5 @@ public class CreateFolderStructure : EditorWindow
         EditorGUILayout.EndVertical();
     }
 }
+
+#endif
