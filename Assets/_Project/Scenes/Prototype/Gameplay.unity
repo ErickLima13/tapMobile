@@ -2534,7 +2534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _score: 0
-  _maxLife: 999
+  _maxLife: 3
   _currentLife: 0
   _playerAnimator: {fileID: 798914281}
 --- !u!114 &787878872

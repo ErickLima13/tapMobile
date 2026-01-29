@@ -130,8 +130,6 @@ public class WaveController : MonoBehaviour
 
             var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
 
-            Debug.LogWarning(_waves[level].Enemies[i].name + "-nasce em : " + pos);
-
             _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level].Enemies[i]);
             _currentWave.Add(temp.GetComponent<EnemyCollider>());
             float randSpawn = Random.Range(0.2f, 2f);
