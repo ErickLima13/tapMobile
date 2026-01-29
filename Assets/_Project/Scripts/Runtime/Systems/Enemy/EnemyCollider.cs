@@ -84,6 +84,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
 
     private void OnDisable()
     {
+        transform.position = Vector3.zero;
         _visual.sprite = null;
         _light2d.enabled = false;
         _checkTapAction.OnTapCollider -= CheckTap;

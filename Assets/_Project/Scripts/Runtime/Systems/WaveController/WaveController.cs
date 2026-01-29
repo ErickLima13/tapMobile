@@ -129,6 +129,9 @@ public class WaveController : MonoBehaviour
             Vector2 pos = _spawnPositions[rand].position;
 
             var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
+
+            Debug.LogWarning(_waves[level].Enemies[i].name + "-nasce em : " + pos);
+
             _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level].Enemies[i]);
             _currentWave.Add(temp.GetComponent<EnemyCollider>());
             float randSpawn = Random.Range(0.2f, 2f);
@@ -142,62 +145,6 @@ public class WaveController : MonoBehaviour
         level++;
 
         _ = StartWave(level, cancellationToken);
-    }
-
-
-    private Vector2 GetRandomPosition(Collider2D collider)
-    {
-        Bounds colBounds = collider.bounds;
-
-        Vector2 minBounds = new(colBounds.min.x, colBounds.min.y);
-        Vector2 maxBounds = new(colBounds.max.x, colBounds.max.y);
-
-        float randomX = Random.Range(minBounds.x, maxBounds.x);
-        float randomY = Random.Range(minBounds.y, maxBounds.y);
-
-        return new(randomX, randomY);
-    }
-
-    private Vector2 GetRandomSpawnPosition(Collider2D collider)
-    {
-        Vector2 spawnPos = Vector2.zero;
-        bool isSpawnPosValid = false;
-
-        int count = 0;
-        int maxCount = 200;
-
-        int enemyLayer = LayerMask.NameToLayer("CheckTap");
-
-        while (!isSpawnPosValid && count < maxCount)
-        {
-            spawnPos = GetRandomPosition(collider);
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(spawnPos, 1f);
-
-            bool isInvalidCollision = false;
-
-            foreach (Collider2D col in colliders)
-            {
-                if (col.gameObject.layer == enemyLayer)
-                {
-                    isInvalidCollision = true;
-                    break;
-                }
-            }
-
-            if (!isInvalidCollision)
-            {
-                isSpawnPosValid = true;
-            }
-
-            count++;
-        }
-
-        if (!isSpawnPosValid)
-        {
-            Debug.LogWarning("not found valid pos");
-        }
-
-        return spawnPos;
     }
 
     private void OnDisable()

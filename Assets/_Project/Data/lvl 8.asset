@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: lvl 8
   m_EditorClassIdentifier: 
   Speed: 0.4
-  Lifes: 5
+  Lifes: 1
   Visual: {fileID: 21300000, guid: 7b20fe1e908b233459e76bd25094bd05, type: 3}
