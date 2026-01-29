@@ -2585,8 +2585,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: efb222c381cfde7499f4c90970421c9a, type: 2}
   - {fileID: 11400000, guid: b5fb3a6fd0a83d141a0d9fab38bbe4b4, type: 2}
   - {fileID: 11400000, guid: cdd111797c1a20c4891d6864956c7f16, type: 2}
-  _areaSpawn: {fileID: 1839905157}
-  hudController: {fileID: 787878873}
+  _areaSpawn: {fileID: 0}
+  hudController: {fileID: 0}
   _enemyPrefab: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
   _waveCount: 0
   _totalEnemies: 0
@@ -2915,8 +2915,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4287179385
-  m_fontColor: {r: 0.4726531, g: 0.16487184, b: 0.5377358, a: 1}
+    rgba: 4286129763
+  m_fontColor: {r: 0.38823533, g: 0.14901961, b: 0.47450984, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

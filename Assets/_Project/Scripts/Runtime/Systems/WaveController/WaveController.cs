@@ -56,7 +56,7 @@ public class WaveController : MonoBehaviour
 
         for (int i = 1; i < _heightMax; i++)
         {
-            for(int x = 0; x < 5; x++)
+            for(int x = 0; x < 4; x++)
             {
                 GameObject temp = new("area " + i + $"-{x}");
 
