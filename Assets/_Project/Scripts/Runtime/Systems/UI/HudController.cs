@@ -6,8 +6,10 @@ using Zenject;
 public class HudController : MonoBehaviour
 {
     [Inject] private PlayerStatus _playerStatus;
+    [Inject] private WaveController _waveController;
 
     [SerializeField] private TextMeshProUGUI _scoreText;
+    [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private Image[] _livesImg;
     [SerializeField] private Sprite[] _pauseImg;
     [SerializeField] private GameObject _gameOverAnimation;
@@ -32,9 +34,15 @@ public class HudController : MonoBehaviour
 
         UpdateHud(PointType.Score, 0);
         _playerStatus.OnUpdateHud += UpdateHud;
+        _waveController.OnWaveCompleted += UpdateWaveText;
     }
 
-    public void UpdateHud(PointType value, int total)
+    private void UpdateWaveText(int level)
+    {
+        _waveText.text = "Wave :" + level;
+    }
+
+    private void UpdateHud(PointType value, int total)
     {
         if (value == PointType.Score)
         {
@@ -70,6 +78,7 @@ public class HudController : MonoBehaviour
     private void OnDisable()
     {
         _playerStatus.OnUpdateHud -= UpdateHud;
+        _waveController.OnWaveCompleted -= UpdateWaveText;
     }
 
     private void GameOver()

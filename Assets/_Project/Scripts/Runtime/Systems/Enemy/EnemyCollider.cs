@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using Zenject;
-using static UnityEngine.Rendering.DebugUI;
 
 public enum PointType
 {
@@ -59,13 +58,18 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
 
     public bool GetIsDied() { return died; }
 
+    private async Task EffectAnimation()
+    {
+        await UniTask.WaitUntil(() => !_spawnEffect.IsAnimation());
+
+        _objectPooler.ReturnToPool("effect", _spawnEffect.gameObject);
+    }
+
     public async Task SpawnEnemy(Enemy enemy)
     {
         _boxCollider.enabled = false;
 
-        await UniTask.WaitUntil(() => !_spawnEffect.IsAnimation());
-
-        _objectPooler.ReturnToPool("effect", _spawnEffect.gameObject);
+        _ = EffectAnimation();
 
         _checkTapAction.OnTapCollider += CheckTap;
 

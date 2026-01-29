@@ -1,9 +1,11 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 public class WaveController : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class WaveController : MonoBehaviour
     [Inject] private DamagePlayer _damagePlayer;
     [Inject] private PlayerStatus _playerStatus;
     [Inject] private ScreenLimits _screenLimits;
+
+    public event Action<int> OnWaveCompleted; 
 
     [SerializeField] private List<Wave> _waves;
     [SerializeField] private LayerMask _enemyLayer;
@@ -25,6 +29,8 @@ public class WaveController : MonoBehaviour
     [SerializeField] private int _waveCount;
     [SerializeField] private int _totalEnemies;
     [SerializeField] private int enemiesInScene;
+    [SerializeField] private Vector2 _timeSpawn;
+    [SerializeField] private float _heightMax;
 
     private List<EnemyCollider> _currentWave = new();
 
@@ -48,9 +54,9 @@ public class WaveController : MonoBehaviour
 
         GameObject parent = new("SpawnAreas");
 
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < _heightMax; i++)
         {
-            for(int x = 0; x < 4; x++)
+            for(int x = 0; x < 5; x++)
             {
                 GameObject temp = new("area " + i + $"-{x}");
 
@@ -88,7 +94,7 @@ public class WaveController : MonoBehaviour
     {
         //numero de inimigos minimos será 5, e o maximo será 5 * numero de waves.
 
-        int numberOfEnemies = Random.Range(5, 5 * level);
+        int numberOfEnemies =  5 * level;
         enemiesInScene = numberOfEnemies;
         _totalEnemies += numberOfEnemies;
 
@@ -132,7 +138,7 @@ public class WaveController : MonoBehaviour
 
             _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level].Enemies[i]);
             _currentWave.Add(temp.GetComponent<EnemyCollider>());
-            float randSpawn = Random.Range(0.2f, 2f);
+            float randSpawn = Random.Range(_timeSpawn.x, _timeSpawn.y);
             await UniTask.WaitForSeconds(randSpawn);
         }
 
@@ -141,6 +147,8 @@ public class WaveController : MonoBehaviour
         _currentWave.Clear();
 
         level++;
+
+        OnWaveCompleted?.Invoke(level);
 
         _ = StartWave(level, cancellationToken);
     }
