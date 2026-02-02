@@ -2549,26 +2549,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f9b6b6de0022ba4ca840c1678379245, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waves:
-  - Enemies:
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    WaveLevel: 0
-  - Enemies:
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 9ebc312a9c7d7a84480c1da29a531269, type: 2}
-    - {fileID: 11400000, guid: 13446b1d051c8aa42a7cd9b1e6ef2a52, type: 2}
-    - {fileID: 11400000, guid: 13446b1d051c8aa42a7cd9b1e6ef2a52, type: 2}
-    - {fileID: 11400000, guid: 13446b1d051c8aa42a7cd9b1e6ef2a52, type: 2}
-    - {fileID: 11400000, guid: 13446b1d051c8aa42a7cd9b1e6ef2a52, type: 2}
-    - {fileID: 11400000, guid: 13446b1d051c8aa42a7cd9b1e6ef2a52, type: 2}
-    WaveLevel: 0
+  _waves: []
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -2585,10 +2566,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: efb222c381cfde7499f4c90970421c9a, type: 2}
   - {fileID: 11400000, guid: b5fb3a6fd0a83d141a0d9fab38bbe4b4, type: 2}
   - {fileID: 11400000, guid: cdd111797c1a20c4891d6864956c7f16, type: 2}
-  _areaSpawn: {fileID: 0}
-  hudController: {fileID: 0}
+  _areaSpawn: {fileID: 1839905157}
+  hudController: {fileID: 787878873}
   _enemyPrefab: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
-  _waveCount: 0
+  _waveCount: 1
   _totalEnemies: 0
   enemiesInScene: 0
   _timeSpawn: {x: 0.2, y: 1.5}
@@ -3238,10 +3219,10 @@ MonoBehaviour:
     size: 15
   - tag: enemy
     prefab: {fileID: 1894389853494630396, guid: 7bd6e60dd18b5c8438167dcb4bae25b8, type: 3}
-    size: 15
+    size: 100
   - tag: effect
     prefab: {fileID: 5642766282230003982, guid: 9927fff922793a144bb6cda70d2ed2e1, type: 3}
-    size: 15
+    size: 500
   - tag: smoke
     prefab: {fileID: 141433446842962269, guid: 6c20a7db0fabbb74fb3305105453e2ac, type: 3}
     size: 15

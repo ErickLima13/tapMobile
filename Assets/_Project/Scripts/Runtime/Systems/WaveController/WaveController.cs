@@ -15,9 +15,9 @@ public class WaveController : MonoBehaviour
     [Inject] private PlayerStatus _playerStatus;
     [Inject] private ScreenLimits _screenLimits;
 
-    public event Action<int> OnWaveCompleted; 
+    public event Action<int> OnWaveCompleted;
 
-    [SerializeField] private List<Wave> _waves;
+    [SerializeField] private List<Wave> _waves = new();
     [SerializeField] private LayerMask _enemyLayer;
     [SerializeField] private List<Enemy> _enemiesSO;
 
@@ -40,15 +40,21 @@ public class WaveController : MonoBehaviour
 
     private CancellationTokenSource cancellationTokenSource = new();
 
+    private void OnEnable()
+    {
+        _checkTapAction.OnEnemyDied += EnemyDied;
+        _damagePlayer.OnDamageEvent += EnemyDied;
+        _playerStatus.OnGameOver += StopWave;
+    }
+
     private void Start()
     {
         CancellationToken cancellationToken = cancellationTokenSource.Token;
 
-        _checkTapAction.OnEnemyDied += EnemyDied;
-        _damagePlayer.OnDamageEvent += EnemyDied;
-        _playerStatus.OnGameOver += StopWave;
+        SetEnemiesSpeed();
 
-        _ = StartWave(0,cancellationToken);
+        _ = StartWave(_waveCount,cancellationToken);
+      
 
         Vector2 area = _screenLimits.GetLimits();
 
@@ -56,7 +62,7 @@ public class WaveController : MonoBehaviour
 
         for (int i = 1; i < _heightMax; i++)
         {
-            for(int x = 0; x < 4; x++)
+            for (int x = 0; x < 4; x++)
             {
                 GameObject temp = new("area " + i + $"-{x}");
 
@@ -67,6 +73,17 @@ public class WaveController : MonoBehaviour
 
                 _spawnPositions.Add(temp.transform);
             }
+        }
+    }
+
+    private void SetEnemiesSpeed()
+    {
+        float speed = 1f;
+
+        for (int i = 0; i < _enemiesSO.Count; i++)
+        {
+            _enemiesSO[i].Speed = speed;
+            speed += 0.1f;
         }
     }
 
@@ -94,49 +111,69 @@ public class WaveController : MonoBehaviour
     {
         //numero de inimigos minimos será 5, e o maximo será 5 * numero de waves.
 
-        int numberOfEnemies =  5 * level;
+        int numberOfEnemies = 4 * level;
         enemiesInScene = numberOfEnemies;
         _totalEnemies += numberOfEnemies;
 
         List<Enemy> enemies = new();
 
-        if(level > 1)
+        int rand = 0;
+
+        int halfLevel = numberOfEnemies / 2;
+
+        for(int i = 0; i < halfLevel; i++)
         {
-            for (int i = 0; i < numberOfEnemies; i++)
+            if (level > _enemiesSO.Count-1)
             {
-                int rand = Random.Range(0, level);
+                rand = Random.Range(_enemiesSO.Count-3, _enemiesSO.Count);
                 enemies.Add(_enemiesSO[rand]);
             }
-
-            _waves.Add(new(enemies, level));
+            else
+            {
+                enemies.Add(_enemiesSO[level]);
+            }        
         }
+
+        for (int i = enemies.Count; i < numberOfEnemies; i++)
+        {
+            if (level > _enemiesSO.Count)
+            {
+                rand = Random.Range(0, _enemiesSO.Count-4);
+            }
+            else
+            {
+                rand = Random.Range(0, level);
+            }
+
+            enemies.Add(_enemiesSO[rand]);
+        }
+
+        _waves.Add(new(enemies, level));
 
         return enemies;
     }
 
-    private async Task StartWave(int level, CancellationToken cancellationToken)
+    private async Task StartWave(int level,CancellationToken cancellationToken)
     {
         if (_cantStartWave)
         {
             return;
         }
 
-        CreateWave(level);
+        List<Enemy> tempEnemies = CreateWave(level);
 
-        await UniTask.WaitForEndOfFrame();
+        await UniTask.WaitForEndOfFrame(cancellationToken);
 
         _waveCount = level;
-        int numberOfEnemies = _waves[level].Enemies.Count;
+        int numberOfEnemies = tempEnemies.Count;
+        OnWaveCompleted?.Invoke(_waveCount);
 
         for (int i = 0; i < numberOfEnemies; i++)
         {
             int rand = Random.Range(0, _spawnPositions.Count);
-
             Vector2 pos = _spawnPositions[rand].position;
-
             var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
-
-            _ = temp.GetComponent<EnemyCollider>().SpawnEnemy(_waves[level].Enemies[i]);
+            temp.GetComponent<EnemyCollider>().SpawnEnemy(tempEnemies[i]);
             _currentWave.Add(temp.GetComponent<EnemyCollider>());
             float randSpawn = Random.Range(_timeSpawn.x, _timeSpawn.y);
             await UniTask.WaitForSeconds(randSpawn);
@@ -150,7 +187,7 @@ public class WaveController : MonoBehaviour
 
         OnWaveCompleted?.Invoke(level);
 
-        _ = StartWave(level, cancellationToken);
+        _ = StartWave(level,cancellationToken);
     }
 
     private void OnDisable()

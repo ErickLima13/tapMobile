@@ -65,7 +65,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         _objectPooler.ReturnToPool("effect", _spawnEffect.gameObject);
     }
 
-    public async Task SpawnEnemy(Enemy enemy)
+    public void SpawnEnemy(Enemy enemy)
     {
         _boxCollider.enabled = false;
 
