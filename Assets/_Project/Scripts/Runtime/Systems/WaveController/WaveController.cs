@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
+using System.Linq;
 
 public class WaveController : MonoBehaviour
 {
@@ -150,7 +152,32 @@ public class WaveController : MonoBehaviour
 
         _waves.Add(new(enemies, level));
 
+        Shuffle(enemies);
+
         return enemies;
+    }
+
+    private void Shuffle(List<Enemy> a)
+    {
+        // Loops through array
+        for (int i = a.Count - 1; i > 0; i--)
+        {
+            // Randomize a number between 0 and i (so that the range decreases each time)
+            var rnd = Random.Range(0, i);
+
+            // Save the value of the current i, otherwise it'll overright when we swap the values
+            var temp = a[i];
+
+            // Swap the new and old values
+            a[i] = a[rnd];
+            a[rnd] = temp;
+        }
+
+        // Print
+        //for (int i = 0; i < a.Count; i++)
+        //{
+        //    Debug.Log(a[i]);
+        //}
     }
 
     private async Task StartWave(int level,CancellationToken cancellationToken)
