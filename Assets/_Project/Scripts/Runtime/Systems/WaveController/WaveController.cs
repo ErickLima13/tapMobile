@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
-using System.Linq;
 
 public class WaveController : MonoBehaviour
 {
@@ -55,8 +53,8 @@ public class WaveController : MonoBehaviour
 
         SetEnemiesSpeed();
 
-        _ = StartWave(_waveCount,cancellationToken);
-      
+        _ = StartWave(_waveCount, cancellationToken);
+
 
         Vector2 area = _screenLimits.GetLimits();
 
@@ -85,7 +83,21 @@ public class WaveController : MonoBehaviour
         for (int i = 0; i < _enemiesSO.Count; i++)
         {
             _enemiesSO[i].Speed = speed;
-            speed += 0.1f;
+            speed += 0.2f;
+        }
+
+        SetLifeStart(0, 1);
+        SetLifeStart(4, 2);
+        SetLifeStart(8, 3);
+
+
+    }
+
+    private void SetLifeStart(int start, int lifes)
+    {
+        for (int e = start; e <= start + 3; e++)
+        {
+            _enemiesSO[e].Lifes = lifes;
         }
     }
 
@@ -123,24 +135,24 @@ public class WaveController : MonoBehaviour
 
         int halfLevel = numberOfEnemies / 2;
 
-        for(int i = 0; i < halfLevel; i++)
+        for (int i = 0; i < halfLevel; i++)
         {
-            if (level > _enemiesSO.Count-1)
+            if (level > _enemiesSO.Count - 1)
             {
-                rand = Random.Range(_enemiesSO.Count-3, _enemiesSO.Count);
+                rand = Random.Range(_enemiesSO.Count - 3, _enemiesSO.Count);
                 enemies.Add(_enemiesSO[rand]);
             }
             else
             {
                 enemies.Add(_enemiesSO[level]);
-            }        
+            }
         }
 
         for (int i = enemies.Count; i < numberOfEnemies; i++)
         {
             if (level > _enemiesSO.Count)
             {
-                rand = Random.Range(0, _enemiesSO.Count-4);
+                rand = Random.Range(0, _enemiesSO.Count - 4);
             }
             else
             {
@@ -180,7 +192,7 @@ public class WaveController : MonoBehaviour
         //}
     }
 
-    private async Task StartWave(int level,CancellationToken cancellationToken)
+    private async Task StartWave(int level, CancellationToken cancellationToken)
     {
         if (_cantStartWave)
         {
@@ -214,7 +226,7 @@ public class WaveController : MonoBehaviour
 
         OnWaveCompleted?.Invoke(level);
 
-        _ = StartWave(level,cancellationToken);
+        _ = StartWave(level, cancellationToken);
     }
 
     private void OnDisable()
