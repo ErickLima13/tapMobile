@@ -9,6 +9,8 @@ public class PrincipalInstaller : MonoInstaller
     [SerializeField] private ScreenLimits _screenLimits;
     [SerializeField] private ObjectPooler _objectPooler;
     [SerializeField] private WaveController _waveController;
+    [SerializeField] private RewardedAdController _rewardedAdController;
+
 
     public override void InstallBindings()
     {
@@ -20,5 +22,6 @@ public class PrincipalInstaller : MonoInstaller
         Container.Bind<ScreenLimits>().FromInstance(_screenLimits);
         Container.Bind<ObjectPooler>().FromInstance(_objectPooler);
         Container.Bind<WaveController>().FromInstance(_waveController);
+        Container.Bind<RewardedAdController>().FromInstance(_rewardedAdController);
     }
 }

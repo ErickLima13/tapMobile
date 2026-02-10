@@ -6,6 +6,8 @@ public class PlayerStatus : MonoBehaviour
 {
     [Inject] private DamagePlayer _damagePlayer;
     [Inject] private CheckTapAction _checkTapAction;
+    [Inject] private RewardedAdController _rewardedAdController;
+
 
     public event Action<PointType, int> OnUpdateHud;
 
@@ -23,6 +25,12 @@ public class PlayerStatus : MonoBehaviour
 
         _damagePlayer.OnDamageEvent += DamageEvent;
         _checkTapAction.OnEnemyDied += IncreaseScore;
+        _rewardedAdController.OnRewardEvent += GiveLifeReward;
+    }
+
+    private void GiveLifeReward()
+    {
+        _currentLife = 1;
     }
 
     private void IncreaseScore(PointType value)
@@ -55,6 +63,7 @@ public class PlayerStatus : MonoBehaviour
     {
         _damagePlayer.OnDamageEvent -= DamageEvent;
         _checkTapAction.OnEnemyDied -= IncreaseScore;
+        _rewardedAdController.OnRewardEvent -= GiveLifeReward;
     }
 }
 

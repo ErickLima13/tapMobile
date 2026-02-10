@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -14,6 +16,7 @@ public class WaveController : MonoBehaviour
     [Inject] private DamagePlayer _damagePlayer;
     [Inject] private PlayerStatus _playerStatus;
     [Inject] private ScreenLimits _screenLimits;
+    [Inject] private RewardedAdController _rewardedAdController;
 
     public event Action<int> OnWaveCompleted;
 
@@ -45,6 +48,7 @@ public class WaveController : MonoBehaviour
         _checkTapAction.OnEnemyDied += EnemyDied;
         _damagePlayer.OnDamageEvent += EnemyDied;
         _playerStatus.OnGameOver += StopWave;
+        _rewardedAdController.OnRewardEvent += ContinueWave;
     }
 
     private void Start()
@@ -54,7 +58,6 @@ public class WaveController : MonoBehaviour
         SetEnemiesSpeed();
 
         _ = StartWave(_waveCount, cancellationToken);
-
 
         Vector2 area = _screenLimits.GetLimits();
 
@@ -89,8 +92,6 @@ public class WaveController : MonoBehaviour
         SetLifeStart(0, 1);
         SetLifeStart(4, 2);
         SetLifeStart(8, 3);
-
-
     }
 
     private void SetLifeStart(int start, int lifes)
@@ -109,6 +110,7 @@ public class WaveController : MonoBehaviour
         }
 
         cancellationTokenSource.Cancel();
+        cancellationTokenSource.Dispose();
 
         _cantStartWave = true;
     }
@@ -215,7 +217,7 @@ public class WaveController : MonoBehaviour
             temp.GetComponent<EnemyCollider>().SpawnEnemy(tempEnemies[i]);
             _currentWave.Add(temp.GetComponent<EnemyCollider>());
             float randSpawn = Random.Range(_timeSpawn.x, _timeSpawn.y);
-            await UniTask.WaitForSeconds(randSpawn);
+            await UniTask.WaitForSeconds(randSpawn, cancellationToken: cancellationToken, cancelImmediately: true);
         }
 
         await UniTask.WaitUntil(() => enemiesInScene == 0);
@@ -234,6 +236,8 @@ public class WaveController : MonoBehaviour
         _checkTapAction.OnEnemyDied -= EnemyDied;
         _damagePlayer.OnDamageEvent -= EnemyDied;
         _playerStatus.OnGameOver -= StopWave;
+        _rewardedAdController.OnRewardEvent -= ContinueWave;
+
     }
 
     private void OnDestroy()
@@ -241,17 +245,43 @@ public class WaveController : MonoBehaviour
         cancellationTokenSource?.Cancel();
         cancellationTokenSource?.Dispose();
     }
-}
 
-[System.Serializable]
-public struct Wave
-{
-    public Wave(List<Enemy> enemies, int waveLevel)
+    private void ContinueWave()
     {
-        Enemies = enemies;
-        WaveLevel = waveLevel;
+        _cantStartWave = false;
+        cancellationTokenSource = new CancellationTokenSource(); // Create a new source
+        CancellationToken newToken = cancellationTokenSource.Token;
+        _ = StartWave(_waveCount, newToken);
     }
 
-    public List<Enemy> Enemies;
-    public int WaveLevel;
+
+#if UNITY_EDITOR
+    [CustomEditor(typeof(WaveController))]
+    public class ResetWaveEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            EditorGUILayout.Space(10f);
+            WaveController controller = (WaveController)target;
+            if (GUILayout.Button("Continue Wave"))
+            {
+                controller.ContinueWave();
+            }
+        }
+    }
+#endif
+
+    [System.Serializable]
+    public struct Wave
+    {
+        public Wave(List<Enemy> enemies, int waveLevel)
+        {
+            Enemies = enemies;
+            WaveLevel = waveLevel;
+        }
+
+        public List<Enemy> Enemies;
+        public int WaveLevel;
+    }
 }
