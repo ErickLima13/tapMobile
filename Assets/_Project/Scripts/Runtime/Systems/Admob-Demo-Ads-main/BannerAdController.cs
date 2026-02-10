@@ -4,7 +4,7 @@ using GoogleMobileAds.Api;
 public class BannerAdController : MonoBehaviour
 {
 #if UNITY_ANDROID
-    private string _adUnitId = "ca-app-pub-3940256099942544/6300978111"; // Test banner
+    private string _adUnitId = "ca-app-pub-4967090791095070/4752837332"; // Test banner
 #elif UNITY_IPHONE
     private string _adUnitId = "ca-app-pub-3940256099942544/2934735716"; // Test banner
 #else

@@ -8,7 +8,6 @@ public class PlayerStatus : MonoBehaviour
     [Inject] private CheckTapAction _checkTapAction;
     [Inject] private RewardedAdController _rewardedAdController;
 
-
     public event Action<PointType, int> OnUpdateHud;
 
     public event Action OnGameOver;

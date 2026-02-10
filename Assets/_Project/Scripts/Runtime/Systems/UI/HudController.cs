@@ -7,6 +7,7 @@ public class HudController : MonoBehaviour
 {
     [Inject] private PlayerStatus _playerStatus;
     [Inject] private WaveController _waveController;
+    [Inject] private RewardedAdController _rewardedAdController;
 
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _waveText;
@@ -35,6 +36,7 @@ public class HudController : MonoBehaviour
         UpdateHud(PointType.Score, 0);
         _playerStatus.OnUpdateHud += UpdateHud;
         _waveController.OnWaveCompleted += UpdateWaveText;
+        _rewardedAdController.OnRewardEvent += UpdateHudAfterReward;
     }
 
     private void UpdateWaveText(int level)
@@ -67,18 +69,10 @@ public class HudController : MonoBehaviour
 
     public void PauseButtonClicked()
     {
-        // delay para quando voltar do pause
-
         isPause = !isPause;
         _pausePanel.SetActive(isPause);
         _pauseButton.sprite = isPause ? _pauseImg[0] : _pauseImg[1];
         Time.timeScale = isPause ? 0f : 1f;
-    }
-
-    private void OnDisable()
-    {
-        _playerStatus.OnUpdateHud -= UpdateHud;
-        _waveController.OnWaveCompleted -= UpdateWaveText;
     }
 
     private void GameOver()
@@ -91,7 +85,7 @@ public class HudController : MonoBehaviour
         isGameOver = true;
         Vector2 posGameOver = new(0, 2);
 
-        GameObject temp =  Instantiate(_gameOverAnimation);
+        GameObject temp = Instantiate(_gameOverAnimation);
         temp.transform.position = posGameOver;
 
         _pauseButton.gameObject.SetActive(false);
@@ -99,6 +93,30 @@ public class HudController : MonoBehaviour
         _buttonsPausePanel[2].SetActive(true);
         _buttonsPausePanel[1].SetActive(false);
         _pausePanel.SetActive(true);
-
     }
+
+    private void UpdateHudAfterReward()
+    {
+        isGameOver = false;
+        count = 0;
+        _pauseButton.gameObject.SetActive(true);
+
+        _buttonsPausePanel[0].SetActive(false);
+        _buttonsPausePanel[2].SetActive(false);
+
+        _buttonsPausePanel[1].SetActive(true);
+
+        _pausePanel.SetActive(false);
+
+        _livesImg[0].enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        _playerStatus.OnUpdateHud -= UpdateHud;
+        _waveController.OnWaveCompleted -= UpdateWaveText;
+        _rewardedAdController.OnRewardEvent -= UpdateHudAfterReward;
+    }
+
+
 }

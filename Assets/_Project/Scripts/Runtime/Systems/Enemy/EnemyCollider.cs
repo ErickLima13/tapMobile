@@ -52,8 +52,6 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
             OnTapResult?.Invoke(PointType.Score);
             _objectPooler.ReturnToPool("enemy", gameObject);
         }
-
-        print("acertei");
     }
 
     public bool GetIsDied() { return died; }
