@@ -1,12 +1,18 @@
+using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
+using static PlayerAttack;
 
 public class PlayerStatus : MonoBehaviour
 {
     [Inject] private DamagePlayer _damagePlayer;
-    [Inject] private CheckTapAction _checkTapAction;
+    // [Inject] private CheckTapAction _checkTapAction;
     [Inject] private RewardedAdController _rewardedAdController;
+
+    [Inject] private ObjectPooler _objectPooler;
 
     public event Action<PointType, int> OnUpdateHud;
 
@@ -18,14 +24,50 @@ public class PlayerStatus : MonoBehaviour
 
     [SerializeField] private Animator _playerAnimator;
 
+    public PlayerAttributes playerAttributes;
+
+    public List<GameObject> attackObj = new();
+
+    public float timer;
+
     private void Start()
     {
+        playerAttributes = new(2, 3, 2);
         _currentLife = _maxLife;
 
         _damagePlayer.OnDamageEvent += DamageEvent;
-        _checkTapAction.OnEnemyDied += IncreaseScore;
+        // _checkTapAction.OnEnemyDied += IncreaseScore;
         _rewardedAdController.OnRewardEvent += GiveLifeReward;
+
     }
+
+    private void Update()
+    {
+        timer += Time.deltaTime;
+
+        if(timer > playerAttributes._timeToAttack)
+        {
+            timer = 0;
+
+            if (attackObj.Count < playerAttributes._attackCount)
+            {
+                print("chmaei o attack");
+
+                GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -5, 0), Quaternion.identity);
+
+                attackObj.Add(temp);
+
+                print("ataqeieigf");
+
+            }
+            else
+            {
+                attackObj.Clear();
+            }
+        }
+
+    }
+
 
     private void GiveLifeReward()
     {
@@ -61,7 +103,7 @@ public class PlayerStatus : MonoBehaviour
     private void OnDisable()
     {
         _damagePlayer.OnDamageEvent -= DamageEvent;
-        _checkTapAction.OnEnemyDied -= IncreaseScore;
+        //_checkTapAction.OnEnemyDied -= IncreaseScore;
         _rewardedAdController.OnRewardEvent -= GiveLifeReward;
     }
 }

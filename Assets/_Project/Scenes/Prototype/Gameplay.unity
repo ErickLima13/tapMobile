@@ -1824,7 +1824,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 787878867}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7ade414e58b43f64281efd6225a770ae, type: 3}
   m_Name: 
@@ -1848,9 +1848,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _score: 0
-  _maxLife: 3
+  _maxLife: 999
   _currentLife: 0
   _playerAnimator: {fileID: 798914281}
+  playerAttributes:
+    _attackSpeed: 0
+    _attackCount: 9
+    _timeToAttack: 0
+  attackObj: []
+  timer: 0
 --- !u!114 &787878872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1887,7 +1893,7 @@ MonoBehaviour:
   _totalEnemies: 0
   enemiesInScene: 0
   _timeSpawn: {x: 0.2, y: 1.5}
-  _heightMax: 4
+  _heightMax: 7
   _spawnPositions: []
 --- !u!114 &787878873
 MonoBehaviour:
@@ -3292,6 +3298,9 @@ MonoBehaviour:
   - tag: smoke
     prefab: {fileID: 141433446842962269, guid: 6c20a7db0fabbb74fb3305105453e2ac, type: 3}
     size: 100
+  - tag: playerAttack
+    prefab: {fileID: 2663058439814842389, guid: fa866bccb6865bf4493c1de740a5a11d, type: 3}
+    size: 20
 --- !u!1 &1112407961
 GameObject:
   m_ObjectHideFlags: 0

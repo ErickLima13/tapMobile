@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class EnemyChase : MonoBehaviour
@@ -22,7 +24,17 @@ public class EnemyChase : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        isReady = false;
+        _ = DelayHit();
     }
+
+    private async Task DelayHit()
+    {
+        isReady = false;
+
+        await UniTask.WaitForSeconds(0.3f);
+
+        isReady = true;
+    }
+
 
 }

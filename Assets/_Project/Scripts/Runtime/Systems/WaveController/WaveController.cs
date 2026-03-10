@@ -5,13 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 using Zenject;
 using Random = UnityEngine.Random;
 
 public class WaveController : MonoBehaviour
 {
-    [Inject] private CheckTapAction _checkTapAction;
+    // [Inject] private CheckTapAction _checkTapAction;
     [Inject] private ObjectPooler _objectPooler;
     [Inject] private DamagePlayer _damagePlayer;
     [Inject] private PlayerStatus _playerStatus;
@@ -45,7 +44,7 @@ public class WaveController : MonoBehaviour
 
     private void OnEnable()
     {
-        _checkTapAction.OnEnemyDied += EnemyDied;
+        //_checkTapAction.OnEnemyDied += EnemyDied;
         _damagePlayer.OnDamageEvent += EnemyDied;
         _playerStatus.OnGameOver += StopWave;
         _rewardedAdController.OnRewardEvent += ContinueWave;
@@ -216,6 +215,9 @@ public class WaveController : MonoBehaviour
             var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
             temp.GetComponent<EnemyCollider>().SpawnEnemy(tempEnemies[i]);
             _currentWave.Add(temp.GetComponent<EnemyCollider>());
+
+            _currentWave[i].OnDied += EnemyDied;
+
             float randSpawn = Random.Range(_timeSpawn.x, _timeSpawn.y);
             await UniTask.WaitForSeconds(randSpawn, cancellationToken: cancellationToken, cancelImmediately: true);
         }
@@ -233,7 +235,7 @@ public class WaveController : MonoBehaviour
 
     private void OnDisable()
     {
-        _checkTapAction.OnEnemyDied -= EnemyDied;
+        //  _checkTapAction.OnEnemyDied -= EnemyDied;
         _damagePlayer.OnDamageEvent -= EnemyDied;
         _playerStatus.OnGameOver -= StopWave;
         _rewardedAdController.OnRewardEvent -= ContinueWave;

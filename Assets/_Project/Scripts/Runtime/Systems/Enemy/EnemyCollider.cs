@@ -13,11 +13,10 @@ public enum PointType
 
 public class EnemyCollider : MonoBehaviour, IPooledObject
 {
-    [Inject] private CheckTapAction _checkTapAction;
+    //[Inject] private CheckTapAction _checkTapAction;
     [Inject] private ObjectPooler _objectPooler;
 
-    public event Action<PointType> OnTapResult;
-
+    public event Action<PointType> OnDied;
     public int lifes;
 
     public bool died;
@@ -35,7 +34,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         _light2d.enabled = value;
     }
 
-    private void CheckTap(EnemyCollider area)
+    public void CheckTap(EnemyCollider area)
     {
         if (area != this)
         {
@@ -49,7 +48,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         else
         {
             died = true;
-            OnTapResult?.Invoke(PointType.Score);
+            OnDied?.Invoke(PointType.Score);
             _objectPooler.ReturnToPool("enemy", gameObject);
         }
     }
@@ -69,7 +68,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
 
         _ = EffectAnimation();
 
-        _checkTapAction.OnTapCollider += CheckTap;
+        //_checkTapAction.OnTapCollider += CheckTap;
 
         lifes = enemy.Lifes;
         died = false;
@@ -89,7 +88,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         transform.position = Vector3.zero;
         _visual.sprite = null;
         _light2d.enabled = false;
-        _checkTapAction.OnTapCollider -= CheckTap;
+       // _checkTapAction.OnTapCollider -= CheckTap;
     }
 
     public void OnObjectSpawn()
