@@ -44,12 +44,13 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         if (lifes > 1)
         {
             lifes--;
+            _ = _enemyChase.DelayHit();
         }
         else
         {
             died = true;
-            OnDied?.Invoke(PointType.Score);
             _objectPooler.ReturnToPool("enemy", gameObject);
+            OnDied?.Invoke(PointType.Score);
         }
     }
 
@@ -77,6 +78,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
 
         _enemyChase.speed = enemy.Speed;
         _enemyChase.isReady = true;
+        _enemyChase.isInTheEnd = false;
 
         ActiveVisual(true);
 
@@ -88,8 +90,10 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         transform.position = Vector3.zero;
         _visual.sprite = null;
         _light2d.enabled = false;
+
        // _checkTapAction.OnTapCollider -= CheckTap;
     }
+
 
     public void OnObjectSpawn()
     {

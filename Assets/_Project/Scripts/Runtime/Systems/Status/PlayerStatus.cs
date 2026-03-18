@@ -13,6 +13,7 @@ public class PlayerStatus : MonoBehaviour
     [Inject] private RewardedAdController _rewardedAdController;
 
     [Inject] private ObjectPooler _objectPooler;
+    [Inject] private WaveController _waveController;
 
     public event Action<PointType, int> OnUpdateHud;
 
@@ -32,7 +33,9 @@ public class PlayerStatus : MonoBehaviour
 
     private void Start()
     {
-        playerAttributes = new(2, 3, 2);
+        Time.timeScale = 2.0f; // aumenta a velocidade do jogo
+
+        playerAttributes = new(4, 4, 0.5f);
         _currentLife = _maxLife;
 
         _damagePlayer.OnDamageEvent += DamageEvent;
@@ -43,6 +46,11 @@ public class PlayerStatus : MonoBehaviour
 
     private void Update()
     {
+        if(_waveController.GetEnemiesInScene() == 0)
+        {
+            return;
+        }
+
         timer += Time.deltaTime;
 
         if(timer > playerAttributes._timeToAttack)
@@ -51,14 +59,8 @@ public class PlayerStatus : MonoBehaviour
 
             if (attackObj.Count < playerAttributes._attackCount)
             {
-                print("chmaei o attack");
-
                 GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -5, 0), Quaternion.identity);
-
                 attackObj.Add(temp);
-
-                print("ataqeieigf");
-
             }
             else
             {

@@ -14,8 +14,7 @@ public class DamagePlayer : MonoBehaviour
         if (collision.TryGetComponent<EnemyCollider>(out EnemyCollider enemy))
         {
             OnDamageEvent?.Invoke(PointType.Damage);
-            enemy.died = true;
-            _objectPooler.ReturnToPool("enemy", enemy.gameObject);
+            //_objectPooler.ReturnToPool("enemy", enemy.gameObject);
         }
     }
 

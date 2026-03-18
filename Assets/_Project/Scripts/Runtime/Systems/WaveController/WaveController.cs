@@ -12,7 +12,7 @@ public class WaveController : MonoBehaviour
 {
     // [Inject] private CheckTapAction _checkTapAction;
     [Inject] private ObjectPooler _objectPooler;
-    [Inject] private DamagePlayer _damagePlayer;
+   // [Inject] private DamagePlayer _damagePlayer;
     [Inject] private PlayerStatus _playerStatus;
     [Inject] private ScreenLimits _screenLimits;
     [Inject] private RewardedAdController _rewardedAdController;
@@ -45,7 +45,8 @@ public class WaveController : MonoBehaviour
     private void OnEnable()
     {
         //_checkTapAction.OnEnemyDied += EnemyDied;
-        _damagePlayer.OnDamageEvent += EnemyDied;
+       // _damagePlayer.OnDamageEvent += EnemyDied;
+
         _playerStatus.OnGameOver += StopWave;
         _rewardedAdController.OnRewardEvent += ContinueWave;
     }
@@ -78,19 +79,21 @@ public class WaveController : MonoBehaviour
         }
     }
 
+    public int GetEnemiesInScene() { return enemiesInScene; }
+
     private void SetEnemiesSpeed()
     {
-        float speed = 1f;
+        float speed = 1.5f;
 
         for (int i = 0; i < _enemiesSO.Count; i++)
         {
             _enemiesSO[i].Speed = speed;
-            speed += 0.2f;
+            speed -= 0.1f;
         }
 
-        SetLifeStart(0, 1);
-        SetLifeStart(4, 2);
-        SetLifeStart(8, 3);
+        SetLifeStart(0, 2);
+        SetLifeStart(4, 4);
+        SetLifeStart(8, 6);
     }
 
     private void SetLifeStart(int start, int lifes)
@@ -224,6 +227,11 @@ public class WaveController : MonoBehaviour
 
         await UniTask.WaitUntil(() => enemiesInScene == 0);
 
+        foreach(EnemyCollider enemy in _currentWave)
+        {
+            enemy.OnDied -= EnemyDied;
+        }
+
         _currentWave.Clear();
 
         level++;
@@ -236,7 +244,8 @@ public class WaveController : MonoBehaviour
     private void OnDisable()
     {
         //  _checkTapAction.OnEnemyDied -= EnemyDied;
-        _damagePlayer.OnDamageEvent -= EnemyDied;
+       // _damagePlayer.OnDamageEvent -= EnemyDied;
+
         _playerStatus.OnGameOver -= StopWave;
         _rewardedAdController.OnRewardEvent -= ContinueWave;
 

@@ -8,6 +8,7 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
 {
     [Inject] private ObjectPooler _objectPooler;
     [Inject] private PlayerStatus _playerStatus;
+    [Inject] private WaveController _waveController;
 
     public event Action<PointType> OnAttackEvent;
 
@@ -15,20 +16,28 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
 
     public PlayerAttributes _playerAttributes;
 
-    private void OnEnable()
-    {
-        CheckArea();
-    }
+    private bool isAttack;
 
     private void CheckArea()
-    {
-        _playerAttributes = _playerStatus.playerAttributes;
+    {    
         _target = FindFirstObjectByType<EnemyCollider>();     
-        Debug.Log("Found a collider: " + _target.name);
     }
 
     private void Update()
     {
+        _playerAttributes = _playerStatus.playerAttributes; // tirar quando fizer mecanica roguelike
+
+        if (_waveController.GetEnemiesInScene() == 0)
+        {
+            return;
+        }
+
+        if (_target == null || !_target.gameObject.activeSelf )
+        {
+            CheckArea();
+        }
+
+
         Attack();
     }
 
@@ -40,26 +49,18 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
                 _playerAttributes._attackSpeed * Time.deltaTime);
             transform.position = newTarget;
         }
-        else
-        {
-            CheckArea();
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.TryGetComponent<EnemyCollider>(out EnemyCollider enemy))
+        if (collision.TryGetComponent<EnemyCollider>(out EnemyCollider enemy) == _target)
         {
             if (!enemy.GetIsDied())
             {
                 enemy.CheckTap(enemy);
-                
                 _objectPooler.ReturnToPool("playerAttack", gameObject);
-            }
-            else
-            {
-                CheckArea();
-            }
+                
+            } 
         }
     }
 
@@ -71,7 +72,7 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
     private void OnDisable()
     {
         _target = null;
-        transform.position = new(0, -5, 0);
+        transform.position = new(0, -2, 0);
     }
 
     [System.Serializable]
