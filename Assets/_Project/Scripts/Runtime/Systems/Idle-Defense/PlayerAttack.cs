@@ -1,6 +1,4 @@
-using Cysharp.Threading.Tasks;
 using System;
-using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
 
@@ -17,8 +15,8 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
     public PlayerAttributes _playerAttributes;
 
     private void CheckArea()
-    {    
-        _target = FindFirstObjectByType<EnemyCollider>();     
+    {
+        _target = FindFirstObjectByType<EnemyCollider>();
     }
 
     private void Update()
@@ -30,7 +28,7 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
             return;
         }
 
-        if (_target == null || !_target.gameObject.activeSelf )
+        if (_target == null || !_target.gameObject.activeSelf)
         {
             CheckArea();
         }
@@ -57,8 +55,8 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
             {
                 enemy.CheckTap(enemy);
                 _objectPooler.ReturnToPool("playerAttack", gameObject);
-                
-            } 
+
+            }
         }
     }
 

@@ -1,18 +1,25 @@
 using System;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class BuilderPowerUp : MonoBehaviour, IBuilderPowerUp
+public class BuilderPowerUp : IBuilderPowerUp
 {
     private PlayerAttributes _playerAttributes;
 
     private ButtonChoose _buttonChoose;
 
 
+    public BuilderPowerUp(ButtonChoose buttonChoose)
+    {
+        _buttonChoose = buttonChoose;
+    }
+
     public ButtonChoose Builder()
     {
-        throw new NotImplementedException();
+        ButtonChoose temp = GameObject.Instantiate(_buttonChoose);
+
+        temp.attributes = _playerAttributes;
+
+        return temp;
     }
 
     public IBuilderPowerUp SetAttackCount(int count)
@@ -35,21 +42,25 @@ public class BuilderPowerUp : MonoBehaviour, IBuilderPowerUp
 
     public IBuilderPowerUp SetAttackDescription(string description)
     {
-        throw new NotImplementedException();
+        _buttonChoose._description.text = description;
+        return this;
     }
 
     public IBuilderPowerUp SetAttackImage(Sprite icon)
     {
-        throw new NotImplementedException();
+        _buttonChoose._icon.sprite = icon;
+        return this;
     }
 
     public IBuilderPowerUp SetAttackTittle(string tittle)
     {
-        throw new NotImplementedException();
+        _buttonChoose._tittle.text = tittle;
+        return this;
     }
 
     public IBuilderPowerUp SetClickAction(Action action)
     {
-        throw new NotImplementedException();
+        _buttonChoose._onClick = action;
+        return this;
     }
 }

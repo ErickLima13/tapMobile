@@ -11,6 +11,19 @@ public class ButtonChoose : MonoBehaviour
     public Image _icon;
     public Button _buttonAction;
 
-    
+    public PlayerAttributes attributes;
 
+    public Action _onClick;
+
+    private void Start()
+    {
+        _buttonAction.onClick.AddListener(OnclickAction);
+
+        print("aqui start");
+    }
+
+    public void OnclickAction()
+    {
+        _onClick?.Invoke();
+    }
 }
