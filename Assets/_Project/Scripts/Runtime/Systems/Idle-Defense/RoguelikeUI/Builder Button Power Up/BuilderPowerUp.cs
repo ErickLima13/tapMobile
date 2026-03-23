@@ -3,10 +3,8 @@ using UnityEngine;
 
 public class BuilderPowerUp : IBuilderPowerUp
 {
-    private PlayerAttributes _playerAttributes;
-
     private ButtonChoose _buttonChoose;
-
+    private Action ActionButton;
 
     public BuilderPowerUp(ButtonChoose buttonChoose)
     {
@@ -16,27 +14,25 @@ public class BuilderPowerUp : IBuilderPowerUp
     public ButtonChoose Builder()
     {
         ButtonChoose temp = GameObject.Instantiate(_buttonChoose);
-
-        temp.attributes = _playerAttributes;
-
+        temp._onClick = ActionButton;
         return temp;
     }
 
     public IBuilderPowerUp SetAttackCount(int count)
     {
-        _playerAttributes.AttackCount = count;
+        _buttonChoose.attributes.AttackCount = count;
         return this;
     }
 
     public IBuilderPowerUp SetAttackTime(float time)
     {
-        _playerAttributes.TimeToAttack = time;
+        _buttonChoose.attributes.TimeToAttack = time;
         return this;
     }
 
     public IBuilderPowerUp SetAttackSpeed(float speed)
     {
-        _playerAttributes.AttackSpeed = speed;
+        _buttonChoose.attributes.AttackSpeed = speed;
         return this;
     }
 
@@ -60,7 +56,7 @@ public class BuilderPowerUp : IBuilderPowerUp
 
     public IBuilderPowerUp SetClickAction(Action action)
     {
-        _buttonChoose._onClick = action;
+        ActionButton = action;
         return this;
     }
 }
