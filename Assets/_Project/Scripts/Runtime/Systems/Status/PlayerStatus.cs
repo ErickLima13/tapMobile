@@ -33,7 +33,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void Start()
     {
-        Time.timeScale = 2.0f; // aumenta a velocidade do jogo
+        Time.timeScale = 3.0f; // aumenta a velocidade do jogo
 
         playerAttributes = new(4, 4, 0.5f);
         _currentLife = _maxLife;
@@ -53,13 +53,13 @@ public class PlayerStatus : MonoBehaviour
 
         timer += Time.deltaTime;
 
-        if(timer > playerAttributes._timeToAttack)
+        if(timer > playerAttributes.TimeToAttack)
         {
             timer = 0;
 
-            if (attackObj.Count < playerAttributes._attackCount)
+            if (attackObj.Count < playerAttributes.AttackCount)
             {
-                GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -5, 0), Quaternion.identity);
+                GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -2, 0), Quaternion.identity);
                 attackObj.Add(temp);
             }
             else

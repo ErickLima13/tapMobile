@@ -16,8 +16,6 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
 
     public PlayerAttributes _playerAttributes;
 
-    private bool isAttack;
-
     private void CheckArea()
     {    
         _target = FindFirstObjectByType<EnemyCollider>();     
@@ -46,7 +44,7 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
         if (_target != null)
         {
             Vector3 newTarget = Vector3.MoveTowards(transform.position, _target.gameObject.transform.position,
-                _playerAttributes._attackSpeed * Time.deltaTime);
+                _playerAttributes.AttackSpeed * Time.deltaTime);
             transform.position = newTarget;
         }
     }
@@ -74,20 +72,20 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
         _target = null;
         transform.position = new(0, -2, 0);
     }
+}
 
-    [System.Serializable]
-    public struct PlayerAttributes
+[System.Serializable]
+public struct PlayerAttributes
+{
+    public float AttackSpeed;
+    public int AttackCount;
+    public float TimeToAttack;
+
+    public PlayerAttributes(float attackSpeed, int attackCount, float timeToAttack)
     {
-        public float _attackSpeed;
-        public int _attackCount;
-        public float _timeToAttack;
-
-        public PlayerAttributes(float attackSpeed, int attackCount, float timeToAttack)
-        {
-            _attackSpeed = attackSpeed;
-            _attackCount = attackCount;
-            _timeToAttack = timeToAttack;
-        }
+        AttackSpeed = attackSpeed;
+        AttackCount = attackCount;
+        TimeToAttack = timeToAttack;
     }
 }
 

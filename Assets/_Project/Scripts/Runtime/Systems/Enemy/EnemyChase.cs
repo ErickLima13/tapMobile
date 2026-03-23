@@ -21,7 +21,7 @@ public class EnemyChase : MonoBehaviour
     {
         if (isReady)
         {
-            transform.Translate(speed * Time.deltaTime * Vector3.down);
+            transform.Translate(speed * Time.unscaledDeltaTime * Vector3.down);
         }
     }
 
