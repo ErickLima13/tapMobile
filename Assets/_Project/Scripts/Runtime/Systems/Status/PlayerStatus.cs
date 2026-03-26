@@ -1,10 +1,8 @@
-using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using Zenject;
-using static PlayerAttack;
+using Random = UnityEngine.Random;
 
 public class PlayerStatus : MonoBehaviour
 {
@@ -33,11 +31,13 @@ public class PlayerStatus : MonoBehaviour
 
     public int _experience;
 
+    public TestBuilder testBuilder;
+
     private void Start()
     {
         // Time.timeScale = 2.0f; // aumenta a velocidade do jogo
 
-        playerAttributes = new(2, 2, 2.5f);
+        playerAttributes = new(6, 2, 1.5f);
         _currentLife = _maxLife;
 
         _damagePlayer.OnDamageEvent += DamageEvent;
@@ -50,14 +50,14 @@ public class PlayerStatus : MonoBehaviour
 
     private void Update()
     {
-        if(_waveController.GetEnemiesInScene() == 0)
+        if (_waveController.GetEnemiesInScene() == 0)
         {
             return;
         }
 
         timer += Time.deltaTime;
 
-        if(timer > playerAttributes.TimeToAttack)
+        if (timer > playerAttributes.TimeToAttack)
         {
             timer = 0;
 
@@ -74,11 +74,55 @@ public class PlayerStatus : MonoBehaviour
 
     }
 
-    private  void IncreaseExperience(int xp)
+    private void IncreaseExperience(int xp)
     {
         _experience += xp;
+        CheckLevelUp();
     }
-          
+
+    private void CheckLevelUp()
+    {
+        List<PlayerAttributes> tempList = new();
+
+        if (_experience % 8 == 0)
+        {
+            for (int i = 0; i <= 2; i++)
+            {
+                int idTemp = i;
+                tempList.Add(CreateAttributes());
+                testBuilder.CreateChooseButton(tempList[i], () => IncreaseAttributes(tempList[idTemp]));
+
+                Time.timeScale = 0;
+            }
+        }
+    }
+
+    private void IncreaseAttributes(PlayerAttributes attributes)
+    {
+        playerAttributes.AttackCount += attributes.AttackCount;
+        playerAttributes.AttackSpeed += attributes.AttackSpeed;
+
+        if(playerAttributes.TimeToAttack > 0.2f)
+        {
+            playerAttributes.TimeToAttack -= attributes.TimeToAttack;
+        }
+
+        testBuilder.ClearOptions();
+
+        Time.timeScale = 1;
+    }
+
+    private PlayerAttributes CreateAttributes()
+    {
+        PlayerAttributes attributes = new();
+
+        attributes.AttackCount = Random.Range(0, 3);
+        attributes.AttackSpeed = Random.Range(0, 3);
+        attributes.TimeToAttack = Random.Range(0f, 0.3f);
+
+        return attributes;
+    }
+
 
     private void GiveLifeReward()
     {

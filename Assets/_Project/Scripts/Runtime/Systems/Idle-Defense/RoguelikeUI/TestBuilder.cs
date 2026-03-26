@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TestBuilder : MonoBehaviour
@@ -8,33 +9,31 @@ public class TestBuilder : MonoBehaviour
 
     public Sprite testIcon;
 
-    private void Start()
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            CreateChooseButton();
-        } 
-    }
-
-    private void CreateChooseButton()
+    public void CreateChooseButton(PlayerAttributes attributes, Action result)
     {
         var builder = new BuilderPowerUp(game)
-            .SetAttackCount(1)
-            .SetAttackSpeed(3)
-            .SetAttackTime(5)
-            .SetAttackTittle("teste titulo")
-            .SetAttackDescription("teste descrição")
+            .SetAttackCount(attributes.AttackCount)
+            .SetAttackSpeed(attributes.AttackSpeed)
+            .SetAttackTime(attributes.TimeToAttack)
+            .SetAttackTittle("Subiu de nivel")
+            .SetAttackDescription($"Escolha o \n {attributes.AttackCount},\n{attributes.AttackSpeed},\n{attributes.TimeToAttack.ToString("F2")}")
             .SetAttackImage(testIcon)
-            .SetClickAction(TestAQui);
+            .SetClickAction(result);
 
         var bc = builder.Builder();
 
         bc.transform.SetParent(containerButtons);
         bc.transform.localScale = Vector3.one;
+        containerButtons.gameObject.SetActive(true);
     }
 
-    private void TestAQui()
+    public void ClearOptions()
     {
-        print("aqui");
+        containerButtons.gameObject.SetActive(false);
+
+        for (int i = containerButtons.childCount - 1; i >= 0; i--)
+        {
+            Destroy(containerButtons.GetChild(i).gameObject);
+        }
     }
 }

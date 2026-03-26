@@ -19,9 +19,11 @@ public class EnemyChase : MonoBehaviour
 
     private void Update()
     {
+        if (isInTheEnd) { return; }
+
         if (isReady)
         {
-            transform.Translate(speed * Time.unscaledDeltaTime * Vector3.down);
+            transform.Translate(speed * Time.deltaTime * Vector3.down);
         }
     }
 
