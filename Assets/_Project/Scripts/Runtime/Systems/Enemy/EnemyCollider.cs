@@ -16,7 +16,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
     //[Inject] private CheckTapAction _checkTapAction;
     [Inject] private ObjectPooler _objectPooler;
 
-    public event Action<PointType> OnDied;
+    public event Action<int> OnDied;
     public int lifes;
 
     public bool died;
@@ -27,6 +27,8 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
     [SerializeField] private Light2D _light2d;
 
     private SpawnEffect _spawnEffect;
+
+    public Enemy _currentEnemyData;
 
     public void ActiveVisual(bool value)
     {
@@ -50,7 +52,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         {
             died = true;
             _objectPooler.ReturnToPool("enemy", gameObject);
-            OnDied?.Invoke(PointType.Score);
+            OnDied?.Invoke(_currentEnemyData.Lifes);
         }
     }
 
@@ -65,6 +67,8 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
 
     public void SpawnEnemy(Enemy enemy)
     {
+        _currentEnemyData = enemy;
+
         _boxCollider.enabled = false;
 
         _ = EffectAnimation();

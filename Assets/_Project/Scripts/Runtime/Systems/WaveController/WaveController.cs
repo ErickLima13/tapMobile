@@ -18,6 +18,8 @@ public class WaveController : MonoBehaviour
     [Inject] private RewardedAdController _rewardedAdController;
 
     public event Action<int> OnWaveCompleted;
+    public event Action OnWaveStart;
+    public event Action<int> OnInscreaXp; 
 
     [SerializeField] private List<Wave> _waves = new();
     [SerializeField] private LayerMask _enemyLayer;
@@ -79,11 +81,23 @@ public class WaveController : MonoBehaviour
         }
     }
 
+    public List<Transform> GetEnemiesPosition()
+    {
+        List<Transform> newList = new();
+
+        foreach(EnemyCollider enemy in _currentWave)
+        {
+            newList.Add(enemy.transform);
+        }
+
+        return newList;
+    }
+
     public int GetEnemiesInScene() { return enemiesInScene; }
 
     private void SetEnemiesSpeed()
     {
-        float speed = 1.5f;
+        float speed = 1f;
 
         for (int i = 0; i < _enemiesSO.Count; i++)
         {
@@ -117,11 +131,12 @@ public class WaveController : MonoBehaviour
         _cantStartWave = true;
     }
 
-    private void EnemyDied(PointType type)
+    private void EnemyDied(int value)
     {
         if (enemiesInScene > 0)
         {
             enemiesInScene--;
+            OnInscreaXp?.Invoke(value);
         }
     }
 
@@ -129,7 +144,7 @@ public class WaveController : MonoBehaviour
     {
         //numero de inimigos minimos será 5, e o maximo será 5 * numero de waves.
 
-        int numberOfEnemies = 4 * level;
+        int numberOfEnemies = 8 * level;
         enemiesInScene = numberOfEnemies;
         _totalEnemies += numberOfEnemies;
 
@@ -202,6 +217,8 @@ public class WaveController : MonoBehaviour
         {
             return;
         }
+
+        OnWaveStart?.Invoke();
 
         List<Enemy> tempEnemies = CreateWave(level);
 

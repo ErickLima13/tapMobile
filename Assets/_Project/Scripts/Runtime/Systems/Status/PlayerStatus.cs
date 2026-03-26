@@ -31,16 +31,20 @@ public class PlayerStatus : MonoBehaviour
 
     public float timer;
 
+    public int _experience;
+
     private void Start()
     {
-        Time.timeScale = 3.0f; // aumenta a velocidade do jogo
+        // Time.timeScale = 2.0f; // aumenta a velocidade do jogo
 
-        playerAttributes = new(4, 4, 0.5f);
+        playerAttributes = new(2, 2, 2.5f);
         _currentLife = _maxLife;
 
         _damagePlayer.OnDamageEvent += DamageEvent;
         // _checkTapAction.OnEnemyDied += IncreaseScore;
         _rewardedAdController.OnRewardEvent += GiveLifeReward;
+
+        _waveController.OnInscreaXp += IncreaseExperience;
 
     }
 
@@ -70,6 +74,11 @@ public class PlayerStatus : MonoBehaviour
 
     }
 
+    private  void IncreaseExperience(int xp)
+    {
+        _experience += xp;
+    }
+          
 
     private void GiveLifeReward()
     {
@@ -107,6 +116,9 @@ public class PlayerStatus : MonoBehaviour
         _damagePlayer.OnDamageEvent -= DamageEvent;
         //_checkTapAction.OnEnemyDied -= IncreaseScore;
         _rewardedAdController.OnRewardEvent -= GiveLifeReward;
+
+        _waveController.OnInscreaXp -= IncreaseExperience;
+
     }
 }
 
