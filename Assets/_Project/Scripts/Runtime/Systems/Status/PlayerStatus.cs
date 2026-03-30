@@ -33,11 +33,13 @@ public class PlayerStatus : MonoBehaviour
 
     public TestBuilder testBuilder;
 
+    public int level = 1;
+
     private void Start()
     {
         // Time.timeScale = 2.0f; // aumenta a velocidade do jogo
 
-        playerAttributes = new(6, 2, 1.5f);
+        playerAttributes = new(3, 1, 1.8f);
         _currentLife = _maxLife;
 
         _damagePlayer.OnDamageEvent += DamageEvent;
@@ -45,6 +47,8 @@ public class PlayerStatus : MonoBehaviour
         _rewardedAdController.OnRewardEvent += GiveLifeReward;
 
         _waveController.OnInscreaXp += IncreaseExperience;
+
+        level = 1;
 
     }
 
@@ -61,15 +65,20 @@ public class PlayerStatus : MonoBehaviour
         {
             timer = 0;
 
-            if (attackObj.Count < playerAttributes.AttackCount)
+            for(int i = 0; i < playerAttributes.AttackCount;i++)
             {
                 GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -2, 0), Quaternion.identity);
-                attackObj.Add(temp);
             }
-            else
-            {
-                attackObj.Clear();
-            }
+
+            //if (attackObj.Count < playerAttributes.AttackCount)
+            //{
+            //    GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -2, 0), Quaternion.identity);
+            //    attackObj.Add(temp);
+            //}
+            //else
+            //{
+            //    attackObj.Clear();
+            //}
         }
 
     }
@@ -84,7 +93,7 @@ public class PlayerStatus : MonoBehaviour
     {
         List<PlayerAttributes> tempList = new();
 
-        if (_experience % 8 == 0)
+        if (_experience >= 30 * level)
         {
             for (int i = 0; i <= 2; i++)
             {
@@ -102,7 +111,7 @@ public class PlayerStatus : MonoBehaviour
         playerAttributes.AttackCount += attributes.AttackCount;
         playerAttributes.AttackSpeed += attributes.AttackSpeed;
 
-        if(playerAttributes.TimeToAttack > 0.2f)
+        if (playerAttributes.TimeToAttack > 0.2f)
         {
             playerAttributes.TimeToAttack -= attributes.TimeToAttack;
         }
@@ -110,15 +119,17 @@ public class PlayerStatus : MonoBehaviour
         testBuilder.ClearOptions();
 
         Time.timeScale = 1;
+
+        level++;
     }
 
     private PlayerAttributes CreateAttributes()
     {
         PlayerAttributes attributes = new();
 
-        attributes.AttackCount = Random.Range(0, 3);
-        attributes.AttackSpeed = Random.Range(0, 3);
-        attributes.TimeToAttack = Random.Range(0f, 0.3f);
+        attributes.AttackCount = Random.Range(-1, 2);
+        attributes.AttackSpeed = Random.Range(-0.02f, 0.02f);
+        attributes.TimeToAttack = Random.Range(-0.02f, 0.02f);
 
         return attributes;
     }

@@ -81,28 +81,18 @@ public class WaveController : MonoBehaviour
         }
     }
 
-    public List<Transform> GetEnemiesPosition()
-    {
-        List<Transform> newList = new();
-
-        foreach(EnemyCollider enemy in _currentWave)
-        {
-            newList.Add(enemy.transform);
-        }
-
-        return newList;
-    }
+    public List<EnemyCollider> GetCurrentWave() { return _currentWave; }
 
     public int GetEnemiesInScene() { return enemiesInScene; }
 
     private void SetEnemiesSpeed()
     {
-        float speed = 1f;
+        float speed = 0.5f;
 
         for (int i = 0; i < _enemiesSO.Count; i++)
         {
             _enemiesSO[i].Speed = speed;
-            speed -= 0.1f;
+            //speed -= 0.01f;
         }
 
         SetLifeStart(0, 2);
@@ -144,7 +134,7 @@ public class WaveController : MonoBehaviour
     {
         //numero de inimigos minimos será 5, e o maximo será 5 * numero de waves.
 
-        int numberOfEnemies = 8 * level;
+        int numberOfEnemies = 10 * level;
         enemiesInScene = numberOfEnemies;
         _totalEnemies += numberOfEnemies;
 

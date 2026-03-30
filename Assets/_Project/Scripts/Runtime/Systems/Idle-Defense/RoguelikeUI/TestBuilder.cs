@@ -16,7 +16,9 @@ public class TestBuilder : MonoBehaviour
             .SetAttackSpeed(attributes.AttackSpeed)
             .SetAttackTime(attributes.TimeToAttack)
             .SetAttackTittle("Subiu de nivel")
-            .SetAttackDescription($"Escolha o \n {attributes.AttackCount},\n{attributes.AttackSpeed},\n{attributes.TimeToAttack.ToString("F2")}")
+            .SetAttackDescription($"Escolha o \n Attack Count :{attributes.AttackCount}," +
+            $"\n Attack Speed :{attributes.AttackSpeed.ToString("F2")}," +
+            $"\n Time To Attack:{attributes.TimeToAttack.ToString("F2")}")
             .SetAttackImage(testIcon)
             .SetClickAction(result);
 

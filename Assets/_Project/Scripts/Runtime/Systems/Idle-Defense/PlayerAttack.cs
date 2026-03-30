@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
+using Random = UnityEngine.Random;
 
 public class PlayerAttack : MonoBehaviour, IPooledObject
 {
@@ -14,9 +16,16 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
 
     public PlayerAttributes _playerAttributes;
 
-    private void CheckArea()
+    private List<EnemyCollider> enemyColliders = new();
+
+    public void CheckArea()
     {
-        _target = FindFirstObjectByType<EnemyCollider>();
+        if (_waveController.GetCurrentWave().Count > 0)
+        {
+            enemyColliders.AddRange(_waveController.GetCurrentWave());
+            int idRand = Random.Range(0, enemyColliders.Count);
+            _target = enemyColliders[idRand];
+        }
     }
 
     private void Update()
@@ -33,11 +42,10 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
             CheckArea();
         }
 
-
-        Attack();
+        Movement();
     }
 
-    private void Attack()
+    private void Movement()
     {
         if (_target != null)
         {
@@ -55,14 +63,12 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
             {
                 enemy.CheckTap(enemy);
                 _objectPooler.ReturnToPool("playerAttack", gameObject);
-
             }
         }
     }
 
     public void OnObjectSpawn()
-    {
-        CheckArea();
+    {       
     }
 
     private void OnDisable()
@@ -87,4 +93,10 @@ public struct PlayerAttributes
     }
 }
 
+public enum AttributesType
+{
+    AttackSpeed,
+    AttackCount,
+    TimeToAttack
+}
 
