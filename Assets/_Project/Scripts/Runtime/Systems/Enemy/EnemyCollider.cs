@@ -1,9 +1,11 @@
 using Cysharp.Threading.Tasks;
+using Maneuver.SoundSystem;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using Zenject;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public enum PointType
 {
@@ -15,6 +17,7 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
 {
     //[Inject] private CheckTapAction _checkTapAction;
     [Inject] private ObjectPooler _objectPooler;
+    [Inject] private IAudioManager _audioManager;
 
     public event Action<int> OnDied;
     public int lifes;
@@ -29,6 +32,8 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
     private SpawnEffect _spawnEffect;
 
     public Enemy _currentEnemyData;
+
+    [SerializeField] private AudioFileObject _fireballVfx;
 
     public void ActiveVisual(bool value)
     {
@@ -51,8 +56,11 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         else
         {
             died = true;
+            _objectPooler.SpawnFromPool("explosion", transform.position, Quaternion.identity);
+            _audioManager.Play(_fireballVfx);
             _objectPooler.ReturnToPool("enemy", gameObject);
             OnDied?.Invoke(_currentEnemyData.Lifes);
+          
         }
     }
 

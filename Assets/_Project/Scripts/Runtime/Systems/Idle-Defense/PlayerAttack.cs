@@ -25,6 +25,7 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
             enemyColliders.AddRange(_waveController.GetCurrentWave());
             int idRand = Random.Range(0, enemyColliders.Count);
             _target = enemyColliders[idRand];
+            RotateTheEnemy();
         }
     }
 
@@ -54,6 +55,15 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
             transform.position = newTarget;
         }
     }
+
+    private void RotateTheEnemy()
+    {
+        Vector3 direction = _target.transform.position - transform.position;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + 90;
+        Quaternion rotation = transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * 1);
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -85,11 +95,11 @@ public struct PlayerAttributes
     public int AttackCount;
     public float AttackTime;
 
-    public PlayerAttributes(float attackSpeed, int attackCount, float timeToAttack)
+    public PlayerAttributes(float attackSpeed, int attackCount, float attackTime)
     {
         AttackSpeed = attackSpeed;
         AttackCount = attackCount;
-        AttackTime = timeToAttack;
+        AttackTime = attackTime;
     }
 }
 

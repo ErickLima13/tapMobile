@@ -35,11 +35,13 @@ public class PlayerStatus : MonoBehaviour
 
     public int level = 1;
 
+    private bool _showLevelUp;
+
     private void Start()
     {
         // Time.timeScale = 2.0f; // aumenta a velocidade do jogo
 
-        playerAttributes = new(3, 1, 1.8f);
+        playerAttributes = new(3, 2, 1.8f);
         _currentLife = _maxLife;
 
         _damagePlayer.OnDamageEvent += DamageEvent;
@@ -69,16 +71,6 @@ public class PlayerStatus : MonoBehaviour
             {
                 GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -2, 0), Quaternion.identity);
             }
-
-            //if (attackObj.Count < playerAttributes.AttackCount)
-            //{
-            //    GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -2, 0), Quaternion.identity);
-            //    attackObj.Add(temp);
-            //}
-            //else
-            //{
-            //    attackObj.Clear();
-            //}
         }
 
     }
@@ -86,7 +78,9 @@ public class PlayerStatus : MonoBehaviour
     private void IncreaseExperience(int xp)
     {
         _experience += xp;
-        CheckLevelUp();
+
+        if(!_showLevelUp)
+            CheckLevelUp();
     }
 
     private void CheckLevelUp()
@@ -102,6 +96,8 @@ public class PlayerStatus : MonoBehaviour
                 testBuilder.CreateChooseButton(tempList[i], () => IncreaseAttributes(tempList[idTemp]));
 
                 Time.timeScale = 0;
+
+                _showLevelUp = true;
             }
         }
     }
@@ -121,6 +117,7 @@ public class PlayerStatus : MonoBehaviour
         Time.timeScale = 1;
 
         level++;
+        _showLevelUp = false;
     }
 
     private PlayerAttributes CreateAttributes()

@@ -87,7 +87,7 @@ public class WaveController : MonoBehaviour
 
     private void SetEnemiesSpeed()
     {
-        float speed = 0.5f;
+        float speed = 0.3f;
 
         for (int i = 0; i < _enemiesSO.Count; i++)
         {

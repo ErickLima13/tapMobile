@@ -102,6 +102,7 @@ MonoBehaviour:
   _boxCollider: {fileID: 6732801031062379782}
   _light2d: {fileID: 7858184784959914131}
   _currentEnemyData: {fileID: 0}
+  _fireballVfx: {fileID: 11400000, guid: f210487aa0b72274485c6d2616103a85, type: 2}
 --- !u!114 &4812680353200302225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,10 +115,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85fdc01dbf5a43343876aa727802a2fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  _target: {fileID: 0}
   speed: 0.2
   isReady: 0
   isInTheEnd: 0
+  _startPosX: 0
 --- !u!50 &5527641429500893249
 Rigidbody2D:
   serializedVersion: 5
