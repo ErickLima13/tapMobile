@@ -26,7 +26,7 @@ public class BuilderPowerUp : IBuilderPowerUp
 
     public IBuilderPowerUp SetAttackTime(float time)
     {
-        _buttonChoose.attributes.TimeToAttack = time;
+        _buttonChoose.attributes.AttackTime = time;
         return this;
     }
 

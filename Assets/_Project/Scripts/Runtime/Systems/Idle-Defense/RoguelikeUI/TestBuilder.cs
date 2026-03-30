@@ -14,11 +14,11 @@ public class TestBuilder : MonoBehaviour
         var builder = new BuilderPowerUp(game)
             .SetAttackCount(attributes.AttackCount)
             .SetAttackSpeed(attributes.AttackSpeed)
-            .SetAttackTime(attributes.TimeToAttack)
+            .SetAttackTime(attributes.AttackTime)
             .SetAttackTittle("Subiu de nivel")
             .SetAttackDescription($"Escolha o \n Attack Count :{attributes.AttackCount}," +
             $"\n Attack Speed :{attributes.AttackSpeed.ToString("F2")}," +
-            $"\n Time To Attack:{attributes.TimeToAttack.ToString("F2")}")
+            $"\n Attack Time:{attributes.AttackTime.ToString("F2")}")
             .SetAttackImage(testIcon)
             .SetClickAction(result);
 

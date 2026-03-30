@@ -61,7 +61,7 @@ public class PlayerStatus : MonoBehaviour
 
         timer += Time.deltaTime;
 
-        if (timer > playerAttributes.TimeToAttack)
+        if (timer > playerAttributes.AttackTime)
         {
             timer = 0;
 
@@ -111,9 +111,9 @@ public class PlayerStatus : MonoBehaviour
         playerAttributes.AttackCount += attributes.AttackCount;
         playerAttributes.AttackSpeed += attributes.AttackSpeed;
 
-        if (playerAttributes.TimeToAttack > 0.2f)
+        if (playerAttributes.AttackTime > 0.2f)
         {
-            playerAttributes.TimeToAttack -= attributes.TimeToAttack;
+            playerAttributes.AttackTime -= attributes.AttackTime;
         }
 
         testBuilder.ClearOptions();
@@ -129,7 +129,7 @@ public class PlayerStatus : MonoBehaviour
 
         attributes.AttackCount = Random.Range(-1, 2);
         attributes.AttackSpeed = Random.Range(-0.02f, 0.02f);
-        attributes.TimeToAttack = Random.Range(-0.02f, 0.02f);
+        attributes.AttackTime = Random.Range(-0.02f, 0.02f);
 
         return attributes;
     }

@@ -83,13 +83,13 @@ public struct PlayerAttributes
 {
     public float AttackSpeed;
     public int AttackCount;
-    public float TimeToAttack;
+    public float AttackTime;
 
     public PlayerAttributes(float attackSpeed, int attackCount, float timeToAttack)
     {
         AttackSpeed = attackSpeed;
         AttackCount = attackCount;
-        TimeToAttack = timeToAttack;
+        AttackTime = timeToAttack;
     }
 }
 
