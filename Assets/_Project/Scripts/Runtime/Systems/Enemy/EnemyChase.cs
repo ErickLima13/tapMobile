@@ -5,16 +5,20 @@ using static UnityEngine.GraphicsBuffer;
 
 public class EnemyChase : MonoBehaviour
 {
-    public Transform target;
+    public Transform _target;
     public float speed;
 
     public bool isReady;
 
     public bool isInTheEnd;
 
+    public float _startPosX;
+
     private void Start()
     {
-        target = GameObject.FindWithTag("Player").transform;
+        _target = GameObject.FindWithTag("Player").transform;
+
+        _startPosX = transform.position.x;
     }
 
     private void Update()
@@ -23,7 +27,10 @@ public class EnemyChase : MonoBehaviour
 
         if (isReady)
         {
-            transform.Translate(speed * Time.deltaTime * Vector3.down);
+
+            Vector3 newTarget = Vector3.MoveTowards(transform.position,new(_startPosX,_target.transform.position.y),
+               speed * Time.deltaTime);
+            transform.position = newTarget;
         }
     }
 
