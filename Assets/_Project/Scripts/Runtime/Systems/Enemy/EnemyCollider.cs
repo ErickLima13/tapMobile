@@ -37,11 +37,34 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
     public EnemyRuntimeLookup enemyRuntimeLookup;
     [SerializeField] private PlayerData playerData;
 
+    private void OnEnable()
+    {
+        _enemyChase.OnTheEnd += DamageInTheEnd;
+    }
 
     public void ActiveVisual(bool value)
     {
         _visual.enabled = value;
         _light2d.enabled = value;
+    }
+
+    private void DamageInTheEnd()
+    {
+        _ = DelayDamage();
+    }
+
+    private async Task DelayDamage()
+    {
+        if (!died)
+        {
+            await UniTask.WaitForEndOfFrame();
+
+            playerData.DamageEvent(PointType.Damage);
+
+            await UniTask.WaitForSeconds(3);
+
+            DamageInTheEnd();
+        }
     }
 
     public void CheckLife(EnemyCollider area)
@@ -110,6 +133,9 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         _light2d.enabled = false;
 
         enemyRuntimeLookup.Unregister(this);
+
+        _enemyChase.OnTheEnd -= DamageInTheEnd;
+
 
         // _checkTapAction.OnTapCollider -= CheckTap;
     }

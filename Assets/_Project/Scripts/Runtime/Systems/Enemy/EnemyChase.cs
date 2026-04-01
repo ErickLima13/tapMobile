@@ -1,10 +1,12 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
 
 public class EnemyChase : MonoBehaviour
 {
+    public event Action OnTheEnd;
+
     public Transform _target;
     public float speed;
 
@@ -27,8 +29,7 @@ public class EnemyChase : MonoBehaviour
 
         if (isReady)
         {
-
-            Vector3 newTarget = Vector3.MoveTowards(transform.position,new(_startPosX,_target.transform.position.y),
+            Vector3 newTarget = Vector3.MoveTowards(transform.position, new(_startPosX, _target.transform.position.y),
                speed * Time.deltaTime);
             transform.position = newTarget;
         }
@@ -40,12 +41,14 @@ public class EnemyChase : MonoBehaviour
         {
             isReady = false;
             isInTheEnd = true;
-        }         
+
+            OnTheEnd?.Invoke();
+        }
     }
 
     public async Task DelayHit()
     {
-        if(isInTheEnd) { return; }
+        if (isInTheEnd) { return; }
 
         isReady = false;
 
@@ -54,5 +57,5 @@ public class EnemyChase : MonoBehaviour
         isReady = true;
     }
 
-
+   
 }
