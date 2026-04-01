@@ -27,14 +27,19 @@ public class HudController : MonoBehaviour
 
     public int count = 2;
 
+    [SerializeField] private PlayerData playerData;
+
     private void Start()
     {
         Screen.orientation = ScreenOrientation.Portrait;
 
         _pausePanel.SetActive(false);
 
+        playerData.Score = 0;
         UpdateHud(PointType.Score, 0);
-        _playerStatus.OnUpdateHud += UpdateHud;
+
+        playerData.OnUpdateHud += UpdateHud;
+
         _waveController.OnWaveCompleted += UpdateWaveText;
         _rewardedAdController.OnRewardEvent += UpdateHudAfterReward;
     }
@@ -113,7 +118,8 @@ public class HudController : MonoBehaviour
 
     private void OnDisable()
     {
-        _playerStatus.OnUpdateHud -= UpdateHud;
+        playerData.OnUpdateHud -= UpdateHud;
+
         _waveController.OnWaveCompleted -= UpdateWaveText;
         _rewardedAdController.OnRewardEvent -= UpdateHudAfterReward;
     }

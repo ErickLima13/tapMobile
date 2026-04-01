@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using Zenject;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public enum PointType
 {
@@ -35,13 +34,17 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
 
     [SerializeField] private AudioFileObject _fireballVfx;
 
+    public EnemyRuntimeLookup enemyRuntimeLookup;
+    [SerializeField] private PlayerData playerData;
+
+
     public void ActiveVisual(bool value)
     {
         _visual.enabled = value;
         _light2d.enabled = value;
     }
 
-    public void CheckTap(EnemyCollider area)
+    public void CheckLife(EnemyCollider area)
     {
         if (area != this)
         {
@@ -60,7 +63,8 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
             _audioManager.Play(_fireballVfx);
             _objectPooler.ReturnToPool("enemy", gameObject);
             OnDied?.Invoke(_currentEnemyData.Lifes);
-          
+
+            playerData.IncreaseScore(PointType.Score);
         }
     }
 
@@ -95,15 +99,19 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         ActiveVisual(true);
 
         _boxCollider.enabled = true;
+
+        enemyRuntimeLookup.Register(this);
     }
 
     private void OnDisable()
     {
-        transform.position = Vector3.zero;
+        transform.position = Vector3.one;
         _visual.sprite = null;
         _light2d.enabled = false;
 
-       // _checkTapAction.OnTapCollider -= CheckTap;
+        enemyRuntimeLookup.Unregister(this);
+
+        // _checkTapAction.OnTapCollider -= CheckTap;
     }
 
 

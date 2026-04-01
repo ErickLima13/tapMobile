@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -18,8 +19,6 @@ public class PlayerStatus : MonoBehaviour
     public event Action OnGameOver;
 
     [SerializeField] private int _score;
-    [SerializeField] private int _maxLife;
-    [SerializeField] private int _currentLife;
 
     [SerializeField] private Animator _playerAnimator;
 
@@ -37,15 +36,24 @@ public class PlayerStatus : MonoBehaviour
 
     private bool _showLevelUp;
 
+    public Image _weapon;
+
+    [SerializeField] private PlayerData playerData;
+
     private void Start()
     {
         // Time.timeScale = 2.0f; // aumenta a velocidade do jogo
 
         playerAttributes = new(3, 2, 1.8f);
-        _currentLife = _maxLife;
+
+        playerData.CurrentLife = playerData.MaxLife;
+
+        playerData.OnPlayerDamage += TakeDamage;
 
         _damagePlayer.OnDamageEvent += DamageEvent;
+
         // _checkTapAction.OnEnemyDied += IncreaseScore;
+
         _rewardedAdController.OnRewardEvent += GiveLifeReward;
 
         _waveController.OnInscreaXp += IncreaseExperience;
@@ -62,6 +70,8 @@ public class PlayerStatus : MonoBehaviour
         }
 
         timer += Time.deltaTime;
+
+        _weapon.fillAmount = timer;
 
         if (timer > playerAttributes.AttackTime)
         {
@@ -134,7 +144,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void GiveLifeReward()
     {
-        _currentLife = 1;
+        playerData.CurrentLife = 1;
     }
 
     private void IncreaseScore(PointType value)
@@ -145,22 +155,13 @@ public class PlayerStatus : MonoBehaviour
 
     private void DamageEvent(PointType value)
     {
-        TakeDamage();
-        OnUpdateHud?.Invoke(value, _currentLife);
+      //  TakeDamage();
+      //  OnUpdateHud?.Invoke(value, _currentLife);
     }
 
     private void TakeDamage()
     {
-        if (_currentLife <= _maxLife)
-        {
-            _currentLife--;
-            _playerAnimator.Play("playerHit");
-            if (_currentLife <= 0)
-            {
-                _currentLife = 0;
-                OnGameOver?.Invoke();
-            }
-        }
+        _playerAnimator.Play("playerHit");
     }
 
     private void OnDisable()

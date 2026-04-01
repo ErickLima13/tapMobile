@@ -71,7 +71,7 @@ public class PlayerAttack : MonoBehaviour, IPooledObject
         {
             if (!enemy.GetIsDied())
             {
-                enemy.CheckTap(enemy);
+                enemy.CheckLife(enemy);
                 _objectPooler.ReturnToPool("playerAttack", gameObject);
             }
         }
