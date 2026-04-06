@@ -26,8 +26,6 @@ public class PlayerStatus : MonoBehaviour
 
     public List<GameObject> attackObj = new();
 
-    public float timer;
-
     public int _experience;
 
     public TestBuilder testBuilder;
@@ -36,9 +34,13 @@ public class PlayerStatus : MonoBehaviour
 
     private bool _showLevelUp;
 
-    public Image _weapon;
+    public Image[] _weaponsIcon;
 
     [SerializeField] private PlayerData playerData;
+
+    public List<WeaponData> weaponDatas = new();
+
+    public List<float> weaponTime = new();
 
     private void Start()
     {
@@ -47,6 +49,7 @@ public class PlayerStatus : MonoBehaviour
         playerAttributes = new(3, 2, 1.8f);
 
         playerData.CurrentLife = playerData.MaxLife;
+        playerData.EndGame = false;
 
         playerData.OnPlayerDamage += TakeDamage;
 
@@ -60,37 +63,50 @@ public class PlayerStatus : MonoBehaviour
 
         level = 1;
 
+
+        for (int i = 0; i < weaponDatas.Count; i++)
+        {
+            weaponTime.Add(weaponDatas[i].WeaponTime);
+        }
     }
 
     private void Update()
     {
-        if (_waveController.GetEnemiesInScene() == 0)
+        if (_waveController.GetEnemiesInScene() == 0 || playerData.EndGame)
         {
             return;
         }
 
-        timer += Time.deltaTime;
-
-        _weapon.fillAmount = timer;
-
-        if (timer > playerAttributes.AttackTime)
+        for (int i = 0; i < weaponDatas.Count; i++)
         {
-            timer = 0;
+            weaponTime[i] += Time.deltaTime;
 
-            for(int i = 0; i < playerAttributes.AttackCount;i++)
+            _weaponsIcon[i].fillAmount = weaponTime[i];
+
+            if (weaponTime[i] > weaponDatas[i].WeaponTime)
             {
-                GameObject temp = _objectPooler.SpawnFromPool("playerAttack", new(0, -2, 0), Quaternion.identity);
+                CreateAttack(weaponDatas[i]);
+                weaponTime[i] = 0;
             }
         }
+    }
 
+    private void CreateAttack(WeaponData weaponData)
+    {
+        for (int i = 0; i < weaponData.WeaponCount; i++)
+        {
+            GameObject temp = _objectPooler.SpawnFromPool("playerAttack", weaponData.WeaponPosition, 
+                Quaternion.identity);
+            temp.GetComponent<Weapon>().SetWeapon(weaponData);
+        }
     }
 
     private void IncreaseExperience(int xp)
     {
-        _experience += xp;
+        //_experience += xp;
 
-        if(!_showLevelUp)
-            CheckLevelUp();
+        //if (!_showLevelUp)
+        //    CheckLevelUp();
     }
 
     private void CheckLevelUp()
@@ -155,8 +171,8 @@ public class PlayerStatus : MonoBehaviour
 
     private void DamageEvent(PointType value)
     {
-      //  TakeDamage();
-      //  OnUpdateHud?.Invoke(value, _currentLife);
+        //  TakeDamage();
+        //  OnUpdateHud?.Invoke(value, _currentLife);
     }
 
     private void TakeDamage()

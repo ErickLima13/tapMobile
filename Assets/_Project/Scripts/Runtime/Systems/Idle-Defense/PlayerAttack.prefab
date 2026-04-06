@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1355055600888472661}
   - component: {fileID: 3533477573269245109}
-  - component: {fileID: 6509651174922572946}
   - component: {fileID: 9150403269406378052}
   - component: {fileID: -5938150899872500882}
+  - component: {fileID: 2666844989853076594}
   m_Layer: 7
   m_Name: PlayerAttack
   m_TagString: Untagged
@@ -95,23 +95,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &6509651174922572946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2663058439814842389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6004410ecb1c3504e92c82fc5ee6b0f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
-  _target: {fileID: 0}
-  _playerAttributes:
-    AttackSpeed: 0
-    AttackCount: 0
-    AttackTime: 0
 --- !u!58 &9150403269406378052
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -161,6 +144,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Zenject::Zenject.ZenAutoInjecter
   _containerSource: 0
+--- !u!114 &2666844989853076594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2663058439814842389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0363b4244963034db62ee3ff90bc23d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Weapon
+  _target: {fileID: 0}
+  enemyRuntimeLookup: {fileID: 11400000, guid: a5820dd5f02939d41afc782b5314511e, type: 2}
+  _playerAttributes:
+    AttackSpeed: 0
+    AttackCount: 0
+    AttackTime: 0
+  _currentWeaponData: {fileID: 0}
+  _visual: {fileID: 3533477573269245109}
 --- !u!1 &6880730740530897341
 GameObject:
   m_ObjectHideFlags: 0

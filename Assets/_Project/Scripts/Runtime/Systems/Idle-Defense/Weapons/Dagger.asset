@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb6e00e99c61621458ffb5619107ec72, type: 3}
+  m_Name: Dagger
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  WeaponCount: 1
+  WeaponDamage: 1
+  WeaponSpeed: 3
+  WeaponTime: 1.8
+  WeaponLiberates: 0
+  WeaponVisual: {fileID: -2120038064194368868, guid: e14d1450f65d30246a8935fc821105a0, type: 3}
+  WeaponPosition: {x: 0, y: -1, z: 0}

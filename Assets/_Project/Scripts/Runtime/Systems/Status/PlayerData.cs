@@ -14,6 +14,8 @@ public class PlayerData : ScriptableObject
     public event Action OnPlayerDamage;
     public event Action OnGameOver;
 
+    public bool EndGame;
+
     public void IncreaseScore(PointType value)
     {
         Score++;
@@ -41,6 +43,8 @@ public class PlayerData : ScriptableObject
                 //OnGameOver?.Invoke();
 
                 OnGameOver?.Invoke();
+
+                EndGame = true;
             }
         }
     }
