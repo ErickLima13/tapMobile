@@ -4,12 +4,9 @@ using Zenject;
 
 public class DamagePlayer : MonoBehaviour
 {
-    [Inject] private ObjectPooler _objectPooler;
-
     public event Action<PointType> OnDamageEvent;
 
     [SerializeField] private PlayerData playerData;
-
 
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -17,9 +14,6 @@ public class DamagePlayer : MonoBehaviour
         if (collision.TryGetComponent<EnemyCollider>(out EnemyCollider enemy))
         {
             playerData.DamageEvent(PointType.Damage);
-
-          //  OnDamageEvent?.Invoke(PointType.Damage);
-            //_objectPooler.ReturnToPool("enemy", enemy.gameObject);
         }
     }
 

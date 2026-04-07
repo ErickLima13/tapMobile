@@ -9,16 +9,16 @@ public class TestBuilder : MonoBehaviour
 
     public Sprite testIcon;
 
-    public void CreateChooseButton(PlayerAttributes attributes, Action result)
+    public void CreateChooseButton(WeaponAttributes attributes, Action result)
     {
         var builder = new BuilderPowerUp(game)
-            .SetAttackCount(attributes.AttackCount)
-            .SetAttackSpeed(attributes.AttackSpeed)
-            .SetAttackTime(attributes.AttackTime)
+            .SetAttackCount(attributes.WeaponCount)
+            .SetAttackDamage(attributes.WeaponDamage)
+            .SetWeaponLiberates(attributes.WeaponLiberates)
             .SetAttackTittle("Subiu de nivel")
-            .SetAttackDescription($"Escolha o \n Attack Count :{attributes.AttackCount}," +
-            $"\n Attack Speed :{attributes.AttackSpeed.ToString("F2")}," +
-            $"\n Attack Time:{attributes.AttackTime.ToString("F2")}")
+            .SetAttackDescription($"Escolha o \n Attack Count :{attributes.WeaponCount}," +
+            $"\n Attack Damage :{attributes.WeaponDamage.ToString("F2")}," +
+            $"\n Release Weapon :{attributes.WeaponLiberates.ToString()}")
             .SetAttackImage(testIcon)
             .SetClickAction(result);
 

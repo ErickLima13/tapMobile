@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb6e00e99c61621458ffb5619107ec72, type: 3}
   m_Name: Dagger 1
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
+  WeaponId: 1
   WeaponCount: 1
   WeaponDamage: 1
   WeaponSpeed: 3

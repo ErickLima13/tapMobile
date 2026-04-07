@@ -2052,9 +2052,9 @@ MonoBehaviour:
   _score: 0
   _playerAnimator: {fileID: 798914281}
   playerAttributes:
-    AttackSpeed: 0
-    AttackCount: 0
-    AttackTime: 0
+    WeaponLiberates: 0
+    WeaponCount: 0
+    WeaponDamage: 0
   attackObj: []
   _experience: 0
   testBuilder: {fileID: 753131144}
@@ -3718,8 +3718,8 @@ RectTransform:
   m_Children:
   - {fileID: 2139035689}
   - {fileID: 1811510119}
-  - {fileID: 1776470146}
   - {fileID: 414895925}
+  - {fileID: 1776470146}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

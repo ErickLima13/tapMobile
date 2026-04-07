@@ -20,19 +20,19 @@ public class BuilderPowerUp : IBuilderPowerUp
 
     public IBuilderPowerUp SetAttackCount(int count)
     {
-        _buttonChoose.attributes.AttackCount = count;
+        _buttonChoose.attributes.WeaponCount = count;
         return this;
     }
 
-    public IBuilderPowerUp SetAttackTime(float time)
+    public IBuilderPowerUp SetAttackDamage(int damage)
     {
-        _buttonChoose.attributes.AttackTime = time;
+        _buttonChoose.attributes.WeaponDamage = damage;
         return this;
     }
 
-    public IBuilderPowerUp SetAttackSpeed(float speed)
+    public IBuilderPowerUp SetWeaponLiberates(bool value)
     {
-        _buttonChoose.attributes.AttackSpeed = speed;
+        _buttonChoose.attributes.WeaponLiberates = value;
         return this;
     }
 

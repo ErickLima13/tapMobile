@@ -11,7 +11,7 @@ public class ButtonChoose : MonoBehaviour
     public Image _icon;
     public Button _buttonAction;
 
-    public PlayerAttributes attributes;
+    public WeaponAttributes attributes;
 
     public Action _onClick;
 

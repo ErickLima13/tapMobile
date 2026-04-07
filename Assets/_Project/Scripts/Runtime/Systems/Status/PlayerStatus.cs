@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,6 @@ using Random = UnityEngine.Random;
 
 public class PlayerStatus : MonoBehaviour
 {
-    [Inject] private DamagePlayer _damagePlayer;
-    // [Inject] private CheckTapAction _checkTapAction;
     [Inject] private RewardedAdController _rewardedAdController;
 
     [Inject] private ObjectPooler _objectPooler;
@@ -22,7 +21,7 @@ public class PlayerStatus : MonoBehaviour
 
     [SerializeField] private Animator _playerAnimator;
 
-    public PlayerAttributes playerAttributes;
+    public WeaponAttributes playerAttributes;
 
     public List<GameObject> attackObj = new();
 
@@ -46,16 +45,10 @@ public class PlayerStatus : MonoBehaviour
     {
         // Time.timeScale = 2.0f; // aumenta a velocidade do jogo
 
-        playerAttributes = new(3, 2, 1.8f);
-
         playerData.CurrentLife = playerData.MaxLife;
         playerData.EndGame = false;
 
         playerData.OnPlayerDamage += TakeDamage;
-
-        _damagePlayer.OnDamageEvent += DamageEvent;
-
-        // _checkTapAction.OnEnemyDied += IncreaseScore;
 
         _rewardedAdController.OnRewardEvent += GiveLifeReward;
 
@@ -63,13 +56,22 @@ public class PlayerStatus : MonoBehaviour
 
         level = 1;
 
+        AddWeaponTime();
+    }
 
+    private void AddWeaponTime()
+    {
         for (int i = 0; i < weaponDatas.Count; i++)
         {
-            weaponTime.Add(weaponDatas[i].WeaponTime);
+            if (IsWeaponLiberate(weaponDatas[i]))
+            {
+                weaponTime.Add(weaponDatas[i].WeaponTime);
+            }
         }
     }
 
+    public bool IsWeaponLiberate(WeaponData weapon) => weapon.WeaponLiberates;
+ 
     private void Update()
     {
         if (_waveController.GetEnemiesInScene() == 0 || playerData.EndGame)
@@ -79,15 +81,18 @@ public class PlayerStatus : MonoBehaviour
 
         for (int i = 0; i < weaponDatas.Count; i++)
         {
-            weaponTime[i] += Time.deltaTime;
-
-            _weaponsIcon[i].fillAmount = weaponTime[i];
-
-            if (weaponTime[i] > weaponDatas[i].WeaponTime)
+            if (IsWeaponLiberate(weaponDatas[i]))
             {
-                CreateAttack(weaponDatas[i]);
-                weaponTime[i] = 0;
-            }
+                weaponTime[i] += Time.deltaTime;
+
+                _weaponsIcon[i].fillAmount = weaponTime[i];
+
+                if (weaponTime[i] > weaponDatas[i].WeaponTime)
+                {
+                    CreateAttack(weaponDatas[i]);
+                    weaponTime[i] = 0;
+                }
+            }   
         }
     }
 
@@ -103,18 +108,20 @@ public class PlayerStatus : MonoBehaviour
 
     private void IncreaseExperience(int xp)
     {
-        //_experience += xp;
+        _experience += xp;
 
-        //if (!_showLevelUp)
-        //    CheckLevelUp();
+        if (!_showLevelUp)
+            CheckLevelUp();
     }
 
     private void CheckLevelUp()
     {
-        List<PlayerAttributes> tempList = new();
+        List<WeaponAttributes> tempList = new();
 
         if (_experience >= 30 * level)
         {
+            CheckAllWeapons();
+
             for (int i = 0; i <= 2; i++)
             {
                 int idTemp = i;
@@ -128,15 +135,10 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
-    private void IncreaseAttributes(PlayerAttributes attributes)
+    private void IncreaseAttributes(WeaponAttributes attributes)
     {
-        playerAttributes.AttackCount += attributes.AttackCount;
-        playerAttributes.AttackSpeed += attributes.AttackSpeed;
-
-        if (playerAttributes.AttackTime > 0.2f)
-        {
-            playerAttributes.AttackTime -= attributes.AttackTime;
-        }
+        playerAttributes.WeaponCount += attributes.WeaponCount;
+        playerAttributes.WeaponDamage += attributes.WeaponDamage;
 
         testBuilder.ClearOptions();
 
@@ -146,33 +148,33 @@ public class PlayerStatus : MonoBehaviour
         _showLevelUp = false;
     }
 
-    private PlayerAttributes CreateAttributes()
+    private WeaponAttributes CreateAttributes()
     {
-        PlayerAttributes attributes = new();
+        WeaponAttributes attributes = new();
 
-        attributes.AttackCount = Random.Range(-1, 2);
-        attributes.AttackSpeed = Random.Range(-0.02f, 0.02f);
-        attributes.AttackTime = Random.Range(-0.02f, 0.02f);
+        attributes.WeaponCount = Random.Range(-1, 2);
+        attributes.WeaponDamage = Random.Range(-1, 2);
 
         return attributes;
     }
 
+    private bool CheckAllWeapons()
+    {
+        for (int i = 0; i < weaponDatas.Count; i++)
+        {
+            if (!IsWeaponLiberate(weaponDatas[i]))
+            {
+                print("nem todas armas liberadas");
+                return false;
+            }    
+        }
+        print("todas armas liberadas");
+        return true;
+    }
 
     private void GiveLifeReward()
     {
         playerData.CurrentLife = 1;
-    }
-
-    private void IncreaseScore(PointType value)
-    {
-        _score++;
-        OnUpdateHud?.Invoke(value, _score);
-    }
-
-    private void DamageEvent(PointType value)
-    {
-        //  TakeDamage();
-        //  OnUpdateHud?.Invoke(value, _currentLife);
     }
 
     private void TakeDamage()
@@ -182,12 +184,8 @@ public class PlayerStatus : MonoBehaviour
 
     private void OnDisable()
     {
-        _damagePlayer.OnDamageEvent -= DamageEvent;
-        //_checkTapAction.OnEnemyDied -= IncreaseScore;
         _rewardedAdController.OnRewardEvent -= GiveLifeReward;
-
         _waveController.OnInscreaXp -= IncreaseExperience;
-
     }
 }
 

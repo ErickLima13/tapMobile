@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Scriptable Objects/WeaponData")]
 public class WeaponData : ScriptableObject
 {
+    public int WeaponId;
+
     [Range(0, 20)] public int WeaponCount; // numero de projetil
     [Range(0, 20)] public int WeaponDamage;
 
@@ -14,4 +16,21 @@ public class WeaponData : ScriptableObject
     public Sprite WeaponVisual;
 
     public Vector3 WeaponPosition;
+}
+
+[System.Serializable]
+public struct WeaponAttributes
+{
+    public bool WeaponLiberates;
+
+    public int WeaponCount;
+    public int WeaponDamage;
+
+
+    public WeaponAttributes(bool liberates, int count, int damage)
+    {
+        WeaponLiberates = liberates;
+        WeaponCount = count;
+        WeaponDamage = damage;
+    }
 }
