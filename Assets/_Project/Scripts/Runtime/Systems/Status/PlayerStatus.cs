@@ -37,7 +37,7 @@ public class PlayerStatus : MonoBehaviour
 
     public List<WeaponData> weaponDatas = new();
 
-    public List<float> weaponTime = new();
+    public Dictionary<WeaponData,float> weaponTime = new();
 
     public bool hasWeaponToUnlock;
 
@@ -63,11 +63,9 @@ public class PlayerStatus : MonoBehaviour
     {
         for (int i = 0; i < weaponDatas.Count; i++)
         {
-            // aqui vai ter que ser dicionario pq a lista de float o valor ta sempre mudando hehe
-
-            if (IsWeaponLiberate(weaponDatas[i]) && !weaponTime.Contains(weaponDatas[i].WeaponTime))
+            if (IsWeaponLiberate(weaponDatas[i]) && !weaponTime.ContainsKey(weaponDatas[i]))
             {
-                weaponTime.Add(weaponDatas[i].WeaponTime);
+                weaponTime.Add(weaponDatas[i], weaponDatas[i].WeaponTime);
             }
         }
     }
@@ -85,14 +83,14 @@ public class PlayerStatus : MonoBehaviour
         {
             if (IsWeaponLiberate(weaponDatas[i]))
             {
-                weaponTime[i] += Time.deltaTime; // erro de indice aqui
+                weaponTime[weaponDatas[i]] += Time.deltaTime; 
 
-                _weaponsIcon[i].fillAmount = weaponTime[i];
+                _weaponsIcon[i].fillAmount = weaponTime[weaponDatas[i]];
 
-                if (weaponTime[i] > weaponDatas[i].WeaponTime)
+                if (weaponTime[weaponDatas[i]] > weaponDatas[i].WeaponTime)
                 {
                     CreateAttack(weaponDatas[i]);
-                    weaponTime[i] = 0;
+                    weaponTime[weaponDatas[i]] = 0;
                 }
             }   
         }
@@ -118,27 +116,25 @@ public class PlayerStatus : MonoBehaviour
 
     private void CheckLevelUp()
     {
-        //List<WeaponData> tempList = new();
-
         if (_experience >= 30 * level)
         {
-            //if (!CheckAllWeapons())
-            //{
-            //    TestWeaponRelease();
-            //}
+            //depois que funcionar mudar uma porcentagem mais complexa
 
-            // se tiver um arma que vai ser liberada então os outros botões tem que ser de atributo
+            int sort = Random.Range(0, 100);
+
+            if (sort <= 25)
+            {
+                hasWeaponToUnlock = false;
+            }
 
             for (int i = 0; i <= 2; i++)
             {
                 int idTemp = i;
-                // tempList.Add();
-
                 WeaponData temp = GetWeapon();
                 WeaponAttributes attributes = CreateAttributes();
                 attributes.WeaponName = temp.WeaponName;
 
-                if (!hasWeaponToUnlock)
+                if (!hasWeaponToUnlock && !CheckAllWeaponUnlock())
                 {
                     testBuilder.CreateUnlockWeaponButton(attributes, () => UnlockWeapon(temp));
                     hasWeaponToUnlock = true;
@@ -153,6 +149,19 @@ public class PlayerStatus : MonoBehaviour
                 _showLevelUp = true;
             }
         }
+    }
+
+    private bool CheckAllWeaponUnlock()
+    {
+        foreach (WeaponData weapon in weaponDatas)
+        {
+            if (!IsWeaponLiberate(weapon))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private WeaponData GetWeapon()
@@ -172,23 +181,12 @@ public class PlayerStatus : MonoBehaviour
             }
         }
 
-        //depois que funcionar mudar pra porcentagem e blabla 
-
-        int sort = Random.Range(0, 100);
-
-        if(sort <= 25)
-        {
-
-        }
-
-        if (!hasWeaponToUnlock)
+        if (!hasWeaponToUnlock && blockeds.Count > 0)
         {
             return weaponDatas[weaponDatas.IndexOf(blockeds[0])];
         }
 
         int idRand = Random.Range(0, tempList.Count);
-
-        Debug.LogError(tempList[idRand]);
 
         return weaponDatas[weaponDatas.IndexOf(tempList[idRand])];
     }

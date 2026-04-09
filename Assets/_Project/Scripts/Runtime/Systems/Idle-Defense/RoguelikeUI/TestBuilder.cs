@@ -14,6 +14,7 @@ public class TestBuilder : MonoBehaviour
         var builder = new BuilderPowerUp(game)
             .SetWeaponLiberates(attributes.WeaponLiberates)
             .SetAttackTittle($"Libere : {attributes.WeaponName}")
+            .SetAttackDescription("Teste descricao")
             .SetAttackImage(testIcon)
             .SetClickAction(result);
 

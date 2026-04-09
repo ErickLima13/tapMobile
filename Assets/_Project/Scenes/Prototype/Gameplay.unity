@@ -2066,7 +2066,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c33eb5cc9e3a0e346bea5bcecfff50be, type: 2}
   - {fileID: 11400000, guid: 432c812203a8875498331b76af491ec0, type: 2}
   - {fileID: 11400000, guid: 30be49203f4eabb44a04ab52dda0c239, type: 2}
-  weaponTime: []
+  hasWeaponToUnlock: 0
 --- !u!114 &787878872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5679,7 +5679,7 @@ MonoBehaviour:
   m_FillMethod: 1
   m_FillAmount: 0
   m_FillClockwise: 1
-  m_FillOrigin: 1
+  m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1754703654
@@ -6422,7 +6422,7 @@ MonoBehaviour:
   m_FillMethod: 1
   m_FillAmount: 0
   m_FillClockwise: 1
-  m_FillOrigin: 1
+  m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
 --- !u!222 &1954969955

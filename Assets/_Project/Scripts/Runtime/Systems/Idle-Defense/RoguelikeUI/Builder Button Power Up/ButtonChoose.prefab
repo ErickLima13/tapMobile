@@ -246,8 +246,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -25}
-  m_SizeDelta: {x: 0, y: 50}
+  m_AnchoredPosition: {x: 0, y: -45.5363}
+  m_SizeDelta: {x: 0, y: 91.0725}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8090572383366163958
 CanvasRenderer:
@@ -502,6 +502,7 @@ MonoBehaviour:
   _icon: {fileID: 9070626330042289034}
   _buttonAction: {fileID: 2277977216479237006}
   attributes:
-    AttackSpeed: 0
-    AttackCount: 0
-    TimeToAttack: 0
+    WeaponLiberates: 0
+    WeaponCount: 0
+    WeaponDamage: 0
+    WeaponName: 

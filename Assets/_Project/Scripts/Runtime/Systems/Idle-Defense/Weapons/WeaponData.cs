@@ -1,4 +1,6 @@
+using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Scriptable Objects/WeaponData")]
 public class WeaponData : ScriptableObject
@@ -17,6 +19,23 @@ public class WeaponData : ScriptableObject
 
     public Vector3 WeaponPosition;
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(WeaponData))]
+public class SetWeaponCount : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        EditorGUILayout.Space(10f);
+        WeaponData controller = (WeaponData)target;
+        if (GUILayout.Button("Reset SO"))
+        {
+            controller.WeaponCount = 1;
+        }
+    }
+}
+#endif
 
 [System.Serializable]
 public struct WeaponAttributes
