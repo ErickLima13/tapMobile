@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Scriptable Objects/WeaponData")]
 public class WeaponData : ScriptableObject
 {
-    public int WeaponId;
+    public string WeaponName;
 
     [Range(0, 20)] public int WeaponCount; // numero de projetil
     [Range(0, 20)] public int WeaponDamage;
@@ -26,11 +26,14 @@ public struct WeaponAttributes
     public int WeaponCount;
     public int WeaponDamage;
 
+    public string WeaponName;
 
-    public WeaponAttributes(bool liberates, int count, int damage)
+
+    public WeaponAttributes(bool liberates, int count, int damage, string name)
     {
         WeaponLiberates = liberates;
         WeaponCount = count;
         WeaponDamage = damage;
+        WeaponName = name;
     }
 }

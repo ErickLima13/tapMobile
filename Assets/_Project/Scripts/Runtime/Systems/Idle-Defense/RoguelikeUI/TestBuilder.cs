@@ -15,8 +15,8 @@ public class TestBuilder : MonoBehaviour
             .SetAttackCount(attributes.WeaponCount)
             .SetAttackDamage(attributes.WeaponDamage)
             .SetWeaponLiberates(attributes.WeaponLiberates)
-            .SetAttackTittle("Subiu de nivel")
-            .SetAttackDescription($"Escolha o \n Attack Count :{attributes.WeaponCount}," +
+            .SetAttackTittle($"Melhore : {attributes.WeaponName}")
+            .SetAttackDescription($"Attack Count :{attributes.WeaponCount}," +
             $"\n Attack Damage :{attributes.WeaponDamage.ToString("F2")}," +
             $"\n Release Weapon :{attributes.WeaponLiberates.ToString()}")
             .SetAttackImage(testIcon)

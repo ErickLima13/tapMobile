@@ -21,8 +21,6 @@ public class PlayerStatus : MonoBehaviour
 
     [SerializeField] private Animator _playerAnimator;
 
-    public WeaponAttributes playerAttributes;
-
     public List<GameObject> attackObj = new();
 
     public int _experience;
@@ -116,17 +114,24 @@ public class PlayerStatus : MonoBehaviour
 
     private void CheckLevelUp()
     {
-        List<WeaponAttributes> tempList = new();
+        //List<WeaponData> tempList = new();
 
         if (_experience >= 30 * level)
         {
-            CheckAllWeapons();
+            //if (!CheckAllWeapons())
+            //{
+            //    TestWeaponRelease();
+            //}
 
             for (int i = 0; i <= 2; i++)
             {
                 int idTemp = i;
-                tempList.Add(CreateAttributes());
-                testBuilder.CreateChooseButton(tempList[i], () => IncreaseAttributes(tempList[idTemp]));
+                // tempList.Add();
+
+                WeaponData temp = TestWeaponRelease();
+                WeaponAttributes attributes = CreateAttributes();
+                attributes.WeaponName = temp.WeaponName;
+                testBuilder.CreateChooseButton(attributes, () => IncreaseAttributes(temp, attributes));
 
                 Time.timeScale = 0;
 
@@ -135,10 +140,37 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
-    private void IncreaseAttributes(WeaponAttributes attributes)
+    private WeaponData TestWeaponRelease()
     {
-        playerAttributes.WeaponCount += attributes.WeaponCount;
-        playerAttributes.WeaponDamage += attributes.WeaponDamage;
+        List<WeaponData> tempList = new();
+
+        foreach(WeaponData weapon in weaponDatas)
+        {
+            if (IsWeaponLiberate(weapon))
+            {
+                tempList.Add(weapon);
+            }
+        }
+
+        //depois que funcionar mudar pra porcentagem e blabla 
+
+        int idRand = Random.Range(0, tempList.Count);
+
+        Debug.LogError(tempList[idRand]);
+
+        //tempList[idRand].WeaponLiberates = true;
+
+        
+
+        return weaponDatas[weaponDatas.IndexOf(tempList[idRand])];
+
+       // AddWeaponTime();
+    }
+
+    private void IncreaseAttributes(WeaponData attributes, WeaponAttributes weaponAttributes)
+    {
+        attributes.WeaponCount += weaponAttributes.WeaponCount;
+        attributes.WeaponDamage += weaponAttributes.WeaponDamage;
 
         testBuilder.ClearOptions();
 
