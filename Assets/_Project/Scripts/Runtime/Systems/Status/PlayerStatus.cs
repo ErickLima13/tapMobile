@@ -39,6 +39,8 @@ public class PlayerStatus : MonoBehaviour
 
     public List<float> weaponTime = new();
 
+    public bool hasWeaponToUnlock;
+
     private void Start()
     {
         // Time.timeScale = 2.0f; // aumenta a velocidade do jogo
@@ -61,7 +63,9 @@ public class PlayerStatus : MonoBehaviour
     {
         for (int i = 0; i < weaponDatas.Count; i++)
         {
-            if (IsWeaponLiberate(weaponDatas[i]))
+            // aqui vai ter que ser dicionario pq a lista de float o valor ta sempre mudando hehe
+
+            if (IsWeaponLiberate(weaponDatas[i]) && !weaponTime.Contains(weaponDatas[i].WeaponTime))
             {
                 weaponTime.Add(weaponDatas[i].WeaponTime);
             }
@@ -81,7 +85,7 @@ public class PlayerStatus : MonoBehaviour
         {
             if (IsWeaponLiberate(weaponDatas[i]))
             {
-                weaponTime[i] += Time.deltaTime;
+                weaponTime[i] += Time.deltaTime; // erro de indice aqui
 
                 _weaponsIcon[i].fillAmount = weaponTime[i];
 
@@ -123,15 +127,26 @@ public class PlayerStatus : MonoBehaviour
             //    TestWeaponRelease();
             //}
 
+            // se tiver um arma que vai ser liberada então os outros botões tem que ser de atributo
+
             for (int i = 0; i <= 2; i++)
             {
                 int idTemp = i;
                 // tempList.Add();
 
-                WeaponData temp = TestWeaponRelease();
+                WeaponData temp = GetWeapon();
                 WeaponAttributes attributes = CreateAttributes();
                 attributes.WeaponName = temp.WeaponName;
-                testBuilder.CreateChooseButton(attributes, () => IncreaseAttributes(temp, attributes));
+
+                if (!hasWeaponToUnlock)
+                {
+                    testBuilder.CreateUnlockWeaponButton(attributes, () => UnlockWeapon(temp));
+                    hasWeaponToUnlock = true;
+                }
+                else
+                {
+                    testBuilder.CreateAttributesButton(attributes, () => IncreaseAttributes(temp, attributes));
+                }
 
                 Time.timeScale = 0;
 
@@ -140,9 +155,10 @@ public class PlayerStatus : MonoBehaviour
         }
     }
 
-    private WeaponData TestWeaponRelease()
+    private WeaponData GetWeapon()
     {
         List<WeaponData> tempList = new();
+        List<WeaponData> blockeds = new();
 
         foreach(WeaponData weapon in weaponDatas)
         {
@@ -150,21 +166,38 @@ public class PlayerStatus : MonoBehaviour
             {
                 tempList.Add(weapon);
             }
+            else
+            {
+                blockeds.Add(weapon);
+            }
         }
 
         //depois que funcionar mudar pra porcentagem e blabla 
+
+        int sort = Random.Range(0, 100);
+
+        if(sort <= 25)
+        {
+
+        }
+
+        if (!hasWeaponToUnlock)
+        {
+            return weaponDatas[weaponDatas.IndexOf(blockeds[0])];
+        }
 
         int idRand = Random.Range(0, tempList.Count);
 
         Debug.LogError(tempList[idRand]);
 
-        //tempList[idRand].WeaponLiberates = true;
-
-        
-
         return weaponDatas[weaponDatas.IndexOf(tempList[idRand])];
+    }
 
-       // AddWeaponTime();
+    private void UnlockWeapon(WeaponData weapon)
+    {
+        weaponDatas[weaponDatas.IndexOf(weapon)].WeaponLiberates = true;
+        AddWeaponTime();
+        ResultChoose();
     }
 
     private void IncreaseAttributes(WeaponData attributes, WeaponAttributes weaponAttributes)
@@ -172,6 +205,11 @@ public class PlayerStatus : MonoBehaviour
         attributes.WeaponCount += weaponAttributes.WeaponCount;
         attributes.WeaponDamage += weaponAttributes.WeaponDamage;
 
+        ResultChoose();
+    }
+
+    private void ResultChoose()
+    {
         testBuilder.ClearOptions();
 
         Time.timeScale = 1;
@@ -188,20 +226,6 @@ public class PlayerStatus : MonoBehaviour
         attributes.WeaponDamage = Random.Range(-1, 2);
 
         return attributes;
-    }
-
-    private bool CheckAllWeapons()
-    {
-        for (int i = 0; i < weaponDatas.Count; i++)
-        {
-            if (!IsWeaponLiberate(weaponDatas[i]))
-            {
-                print("nem todas armas liberadas");
-                return false;
-            }    
-        }
-        print("todas armas liberadas");
-        return true;
     }
 
     private void GiveLifeReward()

@@ -9,21 +9,37 @@ public class TestBuilder : MonoBehaviour
 
     public Sprite testIcon;
 
-    public void CreateChooseButton(WeaponAttributes attributes, Action result)
+    public void CreateUnlockWeaponButton(WeaponAttributes attributes, Action result)
     {
         var builder = new BuilderPowerUp(game)
-            .SetAttackCount(attributes.WeaponCount)
-            .SetAttackDamage(attributes.WeaponDamage)
             .SetWeaponLiberates(attributes.WeaponLiberates)
-            .SetAttackTittle($"Melhore : {attributes.WeaponName}")
-            .SetAttackDescription($"Attack Count :{attributes.WeaponCount}," +
-            $"\n Attack Damage :{attributes.WeaponDamage.ToString("F2")}," +
-            $"\n Release Weapon :{attributes.WeaponLiberates.ToString()}")
+            .SetAttackTittle($"Libere : {attributes.WeaponName}")
             .SetAttackImage(testIcon)
             .SetClickAction(result);
 
         var bc = builder.Builder();
 
+        SetButtonParent(bc);
+    }
+
+    public void CreateAttributesButton(WeaponAttributes attributes, Action result)
+    {
+        var builder = new BuilderPowerUp(game)
+            .SetAttackCount(attributes.WeaponCount)
+            .SetAttackDamage(attributes.WeaponDamage)
+            .SetAttackTittle($"Melhore : {attributes.WeaponName}")
+            .SetAttackDescription($"Attack Count :{attributes.WeaponCount}," +
+            $"\n Attack Damage :{attributes.WeaponDamage.ToString("F2")}")
+            .SetAttackImage(testIcon)
+            .SetClickAction(result);
+
+        var bc = builder.Builder();
+
+        SetButtonParent(bc);
+    }
+
+    private void SetButtonParent(ButtonChoose bc)
+    {
         bc.transform.SetParent(containerButtons);
         bc.transform.localScale = Vector3.one;
         containerButtons.gameObject.SetActive(true);
