@@ -1851,6 +1851,7 @@ MonoBehaviour:
   _maxLife: 3
   _currentLife: 0
   _playerAnimator: {fileID: 798914281}
+  _playerHitVfx: {fileID: 11400000, guid: 0348248f0d757734985ce877fc3ab974, type: 2}
 --- !u!114 &787878872
 MonoBehaviour:
   m_ObjectHideFlags: 0

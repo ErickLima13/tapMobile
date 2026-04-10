@@ -1,9 +1,11 @@
+using Maneuver.SoundSystem;
 using System;
 using UnityEngine;
 using Zenject;
 
 public class PlayerStatus : MonoBehaviour
 {
+    [Inject] private IAudioManager _audioManager;
     [Inject] private DamagePlayer _damagePlayer;
     [Inject] private CheckTapAction _checkTapAction;
     [Inject] private RewardedAdController _rewardedAdController;
@@ -17,6 +19,8 @@ public class PlayerStatus : MonoBehaviour
     [SerializeField] private int _currentLife;
 
     [SerializeField] private Animator _playerAnimator;
+    [SerializeField] private AudioFileObject _playerHitVfx;
+
 
     private void Start()
     {
@@ -50,6 +54,8 @@ public class PlayerStatus : MonoBehaviour
         {
             _currentLife--;
             _playerAnimator.Play("playerHit");
+            _audioManager.Play(_playerHitVfx);
+
             if (_currentLife <= 0)
             {
                 _currentLife = 0;
