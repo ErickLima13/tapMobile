@@ -196,7 +196,7 @@ MonoBehaviour:
     - line: '|   androidMaxAspectRatio: 2.4'
     - line: '|   androidMinAspectRatio: 1'
     - line: '|   applicationIdentifier:'
-    - line: '|     Android: com.SHENANIGANSSOFTWAREHOUSELTDA'
+    - line: '|     Android: com.shenaniganshouse.witchtap'
     - line: '|     Standalone: com.DefaultCompany.2D-URP'
     - line: '|   buildNumber:'
     - line: '|     Standalone: 0'
@@ -290,18 +290,18 @@ MonoBehaviour:
     - line: '|   templateDefaultScene: Assets/Scenes/SampleScene.unity'
     - line: '|   useCustomMainManifest: 0'
     - line: '|   useCustomLauncherManifest: 0'
-    - line: '|   useCustomMainGradleTemplate: 0'
+    - line: '|   useCustomMainGradleTemplate: 1'
     - line: '|   useCustomLauncherGradleManifest: 0'
     - line: '|   useCustomBaseGradleTemplate: 0'
-    - line: '|   useCustomGradlePropertiesTemplate: 0'
-    - line: '|   useCustomGradleSettingsTemplate: 0'
+    - line: '|   useCustomGradlePropertiesTemplate: 1'
+    - line: '|   useCustomGradleSettingsTemplate: 1'
     - line: '|   useCustomProguardFile: 0'
     - line: '|   AndroidTargetArchitectures: 2'
     - line: '|   AndroidAllowedArchitectures: -1'
     - line: '|   AndroidSplashScreenScale: 0'
     - line: '|   androidSplashScreen: {instanceID: 0}'
-    - line: '|   AndroidKeystoreName: '
-    - line: '|   AndroidKeyaliasName: '
+    - line: '|   AndroidKeystoreName: C:/Users/erick/Downloads/userWitchTap.keystore'
+    - line: '|   AndroidKeyaliasName: witchtap'
     - line: '|   AndroidEnableArmv9SecurityFeatures: 0'
     - line: '|   AndroidEnableArm64MTE: 0'
     - line: '|   AndroidBuildApkPerCpuArchitecture: 0'
@@ -313,7 +313,7 @@ MonoBehaviour:
     - line: '|   AndroidEnableTango: 0'
     - line: '|   androidEnableBanner: 1'
     - line: '|   androidUseLowAccuracyLocation: 0'
-    - line: '|   androidUseCustomKeystore: 0'
+    - line: '|   androidUseCustomKeystore: 1'
     - line: '|   m_AndroidBanners:'
     - line: '|   - width: 320'
     - line: '|     height: 180'
@@ -329,7 +329,7 @@ MonoBehaviour:
     - line: '|   - m_BuildTarget: '
     - line: '|     m_Icons:'
     - line: '|     - serializedVersion: 2'
-    - line: '|       m_Icon: {fileID: 2800000, guid: 6d721ec4d78ff1a49a86bba607b0b3d3,
+    - line: '|       m_Icon: {fileID: 2800000, guid: 8d24d7b6d7def7f47ad65a19a9186f40,
         type: 3}'
     - line: '|       m_Width: 128'
     - line: '|       m_Height: 128'
@@ -880,6 +880,6 @@ MonoBehaviour:
         m_CurrentDeploymentTargetId: __builtin__target_default
         m_BuildType: 2
         m_LinkTimeOptimization: 0
-        m_BuildAppBundle: 0
+        m_BuildAppBundle: 1
         m_IPAddressToConnect: 
         m_SymlinkSources: 0
