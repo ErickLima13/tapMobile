@@ -1,0 +1,79 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8146205171651353108
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
+  version: 10
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Shader Graphs_PixelOutline
+  m_Shader: {fileID: 4800000, guid: 9efee19c2b4e312479ac7f8d6ccd031c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _OUTLINEMODE_GRADIENTE_VERTICAL
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: _OutlineThickness
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - CORNERS: 0
+    - _AlphaCutoff: 0.99
+    - _AnimBrightness: 1.94
+    - _AnimColorCount: 2.106
+    - _AnimSaturation: 2
+    - _AnimSpatial: 0
+    - _AnimSpeed: 0
+    - _OutlineMode: 1
+    - _OutlineThickness: 1
+    - _PulseMin: 0
+    - _PulseSpeed: 0
+    m_Colors:
+    - White: {r: 1, g: 1, b: 1, a: 1}
+    - _AnimColor1: {r: 3.5648696, g: 2.7745447, b: 2.7745447, a: 1}
+    - _AnimColor2: {r: 2.670157, g: 2.34862, b: 0, a: 1}
+    - _AnimColor3: {r: 0, g: 2, b: 1.932961, a: 1}
+    - _AnimColor4: {r: 0, g: 0.42156887, b: 2, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _OutlineColor: {r: 11.68932, g: 0.6065214, b: 5.482953, a: 1}
+    - _OutlineColorB: {r: 1.7735848, g: 0.19102706, b: 0.17568529, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
