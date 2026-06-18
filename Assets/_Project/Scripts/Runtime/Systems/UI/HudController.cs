@@ -27,6 +27,8 @@ public class HudController : MonoBehaviour
 
     public int count = 2;
 
+    public GameObject _gameOverCreate;
+
     private void Start()
     {
         Screen.orientation = ScreenOrientation.Portrait;
@@ -52,7 +54,7 @@ public class HudController : MonoBehaviour
         }
         else
         {
-            if(count >= 0)
+            if (count >= 0)
             {
                 _livesImg[count].enabled = false;
                 count--;
@@ -60,7 +62,7 @@ public class HudController : MonoBehaviour
 
             print(count);
 
-            if(total == 0)
+            if (total == 0)
             {
                 GameOver();
             }
@@ -85,8 +87,16 @@ public class HudController : MonoBehaviour
         isGameOver = true;
         Vector2 posGameOver = new(0, 2);
 
-        GameObject temp = Instantiate(_gameOverAnimation);
-        temp.transform.position = posGameOver;
+        if (_gameOverCreate == null)
+        {
+            _gameOverCreate = Instantiate(_gameOverAnimation);
+            _gameOverCreate.transform.position = posGameOver;
+        }
+        else
+        {
+            _gameOverCreate.SetActive(false);
+            _gameOverCreate.SetActive(true);
+        }
 
         _pauseButton.gameObject.SetActive(false);
         _buttonsPausePanel[0].SetActive(true);

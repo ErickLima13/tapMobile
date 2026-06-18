@@ -73,7 +73,7 @@ Material:
     - _AnimColor3: {r: 0, g: 2, b: 1.932961, a: 1}
     - _AnimColor4: {r: 0, g: 0.42156887, b: 2, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _OutlineColor: {r: 11.68932, g: 0.6065214, b: 5.482953, a: 1}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
     - _OutlineColorB: {r: 1.7735848, g: 0.19102706, b: 0.17568529, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -37,8 +37,6 @@ public class WaveController : MonoBehaviour
 
     private List<EnemyCollider> _currentWave = new();
 
-    private bool _cantStartWave;
-
     public List<Transform> _spawnPositions = new();
 
     private CancellationTokenSource cancellationTokenSource = new();
@@ -57,7 +55,7 @@ public class WaveController : MonoBehaviour
 
         SetEnemiesSpeed();
 
-        _ = StartWave(_waveCount, cancellationToken);
+        StartWave(_waveCount, cancellationToken).Forget();
 
         Vector2 area = _screenLimits.GetLimits();
 
@@ -111,8 +109,7 @@ public class WaveController : MonoBehaviour
 
         cancellationTokenSource.Cancel();
         cancellationTokenSource.Dispose();
-
-        _cantStartWave = true;
+        cancellationTokenSource = null;
     }
 
     private void EnemyDied(PointType type)
@@ -194,41 +191,49 @@ public class WaveController : MonoBehaviour
         //}
     }
 
-    private async Task StartWave(int level, CancellationToken cancellationToken)
+    private async UniTaskVoid StartWave(int level, CancellationToken cancellationToken)
     {
-        if (_cantStartWave)
+        if (cancellationToken.IsCancellationRequested)
         {
             return;
         }
 
-        List<Enemy> tempEnemies = CreateWave(level);
-
-        await UniTask.WaitForEndOfFrame(cancellationToken);
-
-        _waveCount = level;
-        int numberOfEnemies = tempEnemies.Count;
-        OnWaveCompleted?.Invoke(_waveCount);
-
-        for (int i = 0; i < numberOfEnemies; i++)
+        try
         {
-            int rand = Random.Range(0, _spawnPositions.Count);
-            Vector2 pos = _spawnPositions[rand].position;
-            var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
-            temp.GetComponent<EnemyCollider>().SpawnEnemy(tempEnemies[i]);
-            _currentWave.Add(temp.GetComponent<EnemyCollider>());
-            float randSpawn = Random.Range(_timeSpawn.x, _timeSpawn.y);
-            await UniTask.WaitForSeconds(randSpawn, cancellationToken: cancellationToken, cancelImmediately: true);
+            await UniTask.WaitForEndOfFrame(cancellationToken);
+
+            List<Enemy> tempEnemies = CreateWave(level);
+
+            _waveCount = level;
+            int numberOfEnemies = tempEnemies.Count;
+            OnWaveCompleted?.Invoke(_waveCount);
+
+            for (int i = 0; i < numberOfEnemies; i++)
+            {
+                int rand = Random.Range(0, _spawnPositions.Count);
+                Vector2 pos = _spawnPositions[rand].position;
+                var temp = _objectPooler.SpawnFromPool("enemy", pos, Quaternion.identity);
+                temp.GetComponent<EnemyCollider>().SpawnEnemy(tempEnemies[i]);
+                _currentWave.Add(temp.GetComponent<EnemyCollider>());
+                float randSpawn = Random.Range(_timeSpawn.x, _timeSpawn.y);
+                await UniTask.WaitForSeconds(randSpawn, cancellationToken: cancellationToken, cancelImmediately: true);
+            }
+
+            await UniTask.WaitUntil(() => enemiesInScene == 0, cancellationToken: cancellationToken, cancelImmediately: true);
+
+            _currentWave.Clear();
+
+            level++;
+
+            OnWaveCompleted?.Invoke(level);
+
+            StartWave(level, cancellationToken).Forget();
         }
+        catch(OperationCanceledException)
+        {
+            _currentWave.Clear();
 
-        await UniTask.WaitUntil(() => enemiesInScene == 0);
-
-        _currentWave.Clear();
-
-        level++;
-
-        OnWaveCompleted?.Invoke(level);
-
-        _ = StartWave(level, cancellationToken);
+        }
     }
 
     private void OnDisable()
@@ -248,10 +253,9 @@ public class WaveController : MonoBehaviour
 
     private void ContinueWave()
     {
-        _cantStartWave = false;
         cancellationTokenSource = new CancellationTokenSource(); // Create a new source
         CancellationToken newToken = cancellationTokenSource.Token;
-        _ = StartWave(_waveCount, newToken);
+        StartWave(_waveCount, newToken).Forget();
     }
 
 
