@@ -200,7 +200,7 @@ public class WaveController : MonoBehaviour
 
         try
         {
-            await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
+            await UniTask.Delay(TimeSpan.FromMilliseconds(100), delayType: DelayType.Realtime, cancellationToken: cancellationToken);
 
             List<Enemy> tempEnemies = CreateWave(level);
 
@@ -255,6 +255,8 @@ public class WaveController : MonoBehaviour
 
     private void ContinueWave()
     {
+        Time.timeScale = 1f;
+
         cancellationTokenSource = new CancellationTokenSource(); // Create a new source
         CancellationToken newToken = cancellationTokenSource.Token;
         StartWave(_waveCount, newToken).Forget();
