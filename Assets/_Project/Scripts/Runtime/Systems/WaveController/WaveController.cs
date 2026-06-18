@@ -200,7 +200,7 @@ public class WaveController : MonoBehaviour
 
         try
         {
-            await UniTask.WaitForEndOfFrame(cancellationToken);
+            await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
 
             List<Enemy> tempEnemies = CreateWave(level);
 
@@ -216,7 +216,9 @@ public class WaveController : MonoBehaviour
                 temp.GetComponent<EnemyCollider>().SpawnEnemy(tempEnemies[i]);
                 _currentWave.Add(temp.GetComponent<EnemyCollider>());
                 float randSpawn = Random.Range(_timeSpawn.x, _timeSpawn.y);
-                await UniTask.WaitForSeconds(randSpawn, cancellationToken: cancellationToken, cancelImmediately: true);
+
+                await UniTask.Delay(TimeSpan.FromSeconds(randSpawn), delayType: DelayType.Realtime, 
+                    cancellationToken: cancellationToken, cancelImmediately: true);
             }
 
             await UniTask.WaitUntil(() => enemiesInScene == 0, cancellationToken: cancellationToken, cancelImmediately: true);

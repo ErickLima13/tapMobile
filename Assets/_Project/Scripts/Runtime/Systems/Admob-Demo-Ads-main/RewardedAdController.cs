@@ -16,6 +16,8 @@ public class RewardedAdController : MonoBehaviour
 
     public event Action OnRewardEvent;
 
+    private bool _isRewardEarned;
+
     private void Start()
     {
         DontDestroyOnLoad(gameObject);
@@ -57,7 +59,7 @@ public class RewardedAdController : MonoBehaviour
             _rewardedAd.Show(reward =>
             {
                 Debug.Log($"RewardedAdController: User earned reward: {reward.Amount} {reward.Type}");
-                OnRewardEvent?.Invoke();
+                _isRewardEarned = true;
             });
         }
         else
@@ -73,11 +75,18 @@ public class RewardedAdController : MonoBehaviour
         {
             Debug.Log("RewardedAdController: Ad closed. Loading next one.");
             LoadRewardedAd();
+
+            if (_isRewardEarned)
+            {
+                _isRewardEarned = false; 
+                OnRewardEvent?.Invoke(); 
+            }
         };
 
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
             Debug.LogError($"RewardedAdController: Failed to show. Reason: {error.GetMessage()}");
+            _isRewardEarned = false;
         };
     }
 
