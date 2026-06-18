@@ -94,7 +94,7 @@ public class HudController : MonoBehaviour
         }
         else
         {
-            _gameOverCreate.SetActive(false);
+
             _gameOverCreate.SetActive(true);
         }
 
@@ -108,6 +108,9 @@ public class HudController : MonoBehaviour
     private void UpdateHudAfterReward()
     {
         isGameOver = false;
+
+        _gameOverCreate.SetActive(false);
+
         count = 0;
         _pauseButton.gameObject.SetActive(true);
 
