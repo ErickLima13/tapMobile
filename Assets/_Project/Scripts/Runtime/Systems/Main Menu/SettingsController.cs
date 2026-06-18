@@ -22,7 +22,9 @@ public class SettingsController : MonoBehaviour
             _muteToogles[0].isOn = false;
         }
 
-        _audioMixer.SetFloat("MusicVolume", volume);
+        float dBValue = Mathf.Log10(volume) * 20;
+
+        _audioMixer.SetFloat("MusicVolume", dBValue);
     }
 
     public void SetVolumeSFX(float volume)
@@ -32,7 +34,9 @@ public class SettingsController : MonoBehaviour
             _muteToogles[1].isOn = false;
         }
 
-        _audioMixer.SetFloat("VfxVolume", volume);
+        float dBValue = Mathf.Log10(volume) * 20;
+
+        _audioMixer.SetFloat("VfxVolume", dBValue);
     }
 
     public void MuteVolumeBMG(bool value)
@@ -49,8 +53,8 @@ public class SettingsController : MonoBehaviour
                 return;
             }
 
-            _volumeSliders[0].value = 0;
-            _audioMixer.SetFloat("MusicVolume", 0);
+            _volumeSliders[0].value = 1;
+            _audioMixer.SetFloat("MusicVolume", 1);
         }
 
     }
@@ -69,8 +73,8 @@ public class SettingsController : MonoBehaviour
                 return;
             }
 
-            _volumeSliders[1].value = 0;
-            _audioMixer.SetFloat("VfxVolume", 0);
+            _volumeSliders[1].value = 1;
+            _audioMixer.SetFloat("VfxVolume", 1);
         }
 
     }
