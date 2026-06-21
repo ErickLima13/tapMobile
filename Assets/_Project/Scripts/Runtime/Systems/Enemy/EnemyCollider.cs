@@ -89,7 +89,6 @@ public class EnemyCollider : MonoBehaviour, IPooledObject
         transform.position = Vector3.zero;
         _visual.sprite = null;
         _light2d.enabled = false;
-        _objectPooler.ReturnToPool("enemy", gameObject);
         _checkTapAction.OnTapCollider -= CheckTap;
     }
 
