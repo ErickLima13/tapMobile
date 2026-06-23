@@ -99,8 +99,12 @@ public class HudController : MonoBehaviour
         }
 
         _pauseButton.gameObject.SetActive(false);
+
         _buttonsPausePanel[0].SetActive(true);
+
+#if UNITY_ANDROID        
         _buttonsPausePanel[2].SetActive(true);
+#endif
         _buttonsPausePanel[1].SetActive(false);
         _pausePanel.SetActive(true);
     }
