@@ -2,10 +2,8 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -40,6 +38,8 @@ public class WaveController : MonoBehaviour
     public List<Transform> _spawnPositions = new();
 
     private CancellationTokenSource cancellationTokenSource = new();
+
+
 
     private void OnEnable()
     {
@@ -200,10 +200,10 @@ public class WaveController : MonoBehaviour
 
         try
         {
-            await UniTask.Delay(TimeSpan.FromMilliseconds(100), delayType: DelayType.Realtime, cancellationToken: cancellationToken);
+
+            await UniTask.Delay(TimeSpan.FromMilliseconds(100), delayType: DelayType.DeltaTime, cancellationToken: cancellationToken);
 
             List<Enemy> tempEnemies = CreateWave(level);
-
             _waveCount = level;
             int numberOfEnemies = tempEnemies.Count;
             OnWaveCompleted?.Invoke(_waveCount);
@@ -217,24 +217,19 @@ public class WaveController : MonoBehaviour
                 _currentWave.Add(temp.GetComponent<EnemyCollider>());
                 float randSpawn = Random.Range(_timeSpawn.x, _timeSpawn.y);
 
-                await UniTask.Delay(TimeSpan.FromSeconds(randSpawn), delayType: DelayType.Realtime, 
+                await UniTask.Delay(TimeSpan.FromSeconds(randSpawn), delayType: DelayType.DeltaTime,
                     cancellationToken: cancellationToken, cancelImmediately: true);
             }
 
             await UniTask.WaitUntil(() => enemiesInScene == 0, cancellationToken: cancellationToken, cancelImmediately: true);
-
             _currentWave.Clear();
-
             level++;
-
             OnWaveCompleted?.Invoke(level);
-
             StartWave(level, cancellationToken).Forget();
         }
-        catch(OperationCanceledException)
+        catch (OperationCanceledException)
         {
             _currentWave.Clear();
-
         }
     }
 
